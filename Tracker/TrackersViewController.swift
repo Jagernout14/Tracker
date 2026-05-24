@@ -2,8 +2,16 @@ import UIKit
 
 final class TrackersViewController: UIViewController {
     
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     private lazy var emptyScreenImage = UIImageView()
     private lazy var emptyScreenLabel = UILabel()
+    
+    private var categories: [TrackerCategory]
+    private var completedTrackers: [TrackerRecord]
+    
     
     
     override func viewDidLoad() {
@@ -12,7 +20,42 @@ final class TrackersViewController: UIViewController {
         showPlaceholder()
     }
     
-    //MARK: - Setup UI
+    @objc
+    private func didTapAddTrackerButton() {
+        
+    }
+    
+    private func completeTracker(id: UUID, date: Date) {
+        let record = TrackerRecord(trackerId: id, date: date)
+        completedTrackers.append(record)
+    }
+    
+    private func uncompleteTracker(id: UUID, date: Date) {
+        //TODO: написать реализацию удаления трекера из массива выполненых
+    }
+    
+    private func addTracker(_ tracker: Tracker, to categoryTitle: String) {
+        let updatedCategories = categories.map { category in
+            if category.title == categoryTitle {
+                let updatedTrackers = category.trackers + [tracker]
+                
+                return TrackerCategory(title: category.title, trackers: updatedTrackers)
+            }
+            
+            return category
+        }
+        categories = updatedCategories
+    }
+    
+    private func addCategory(_ category: TrackerCategory) {
+        categories = categories + [category]
+    }
+    
+}
+
+//MARK: - Setup UI
+extension TrackersViewController {
+    
     private func setupSearchController() {
         let searchController = UISearchController(searchResultsController: nil)
         searchController.obscuresBackgroundDuringPresentation = false
@@ -88,7 +131,6 @@ final class TrackersViewController: UIViewController {
     private func setupUI() {
         setupNavigationBar()
         setupNavigationBarAppearance()
-        
     }
     
     private func showPlaceholder() {
@@ -96,9 +138,5 @@ final class TrackersViewController: UIViewController {
         setupEmptyScreenLabel()
     }
     
-    @objc
-    private func didTapAddTrackerButton() {
-        
-    }
     
 }
