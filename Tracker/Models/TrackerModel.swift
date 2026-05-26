@@ -5,5 +5,4 @@ struct Tracker {
     let name: String
     let color: UIColor
     let icon: String
-    let schedule: [WeekDay]
 }
