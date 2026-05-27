@@ -19,74 +19,103 @@ final class TrackersCollectionViewCell: UICollectionViewCell {
     override init(frame: CGRect) {
         super.init(frame: frame)
         
-        setupViews()
-        setupConstraints()
-        
-        trackerButton.addTarget(self, action: #selector(didTapTrackerButton), for: .touchUpInside)
+        setupCell()
     }
     
     required init?(coder: NSCoder) {
-        fatalError("Ошибка инициализации TrackerCollectionViewCell")
+        fatalError("Ошибка инициализации TrackersCollectionViewCell")
     }
     
-    // MARK: - Public Methods
-    private func setupViews() {
+    // MARK: - Private Methods
+    private func setupCell() {
+        setupCardView()
+        setupEmoji()
+        setupTitleLabel()
+        setupDaysCountLabel()
+        setupTrackerButton()
+    }
+    
+    private func setupCardView() {
         contentView.addSubview(cardView)
-        cardView.addSubview(emojiBackgroundView)
-        emojiBackgroundView.addSubview(emojiLabel)
-        cardView.addSubview(titleLabel)
-        contentView.addSubview(daysCountLabel)
-        contentView.addSubview(trackerButton)
-        
+        cardView.translatesAutoresizingMaskIntoConstraints = false
         cardView.layer.cornerRadius = 16
         cardView.clipsToBounds = true
-        
-        emojiBackgroundView.layer.cornerRadius = 12
-        emojiBackgroundView.clipsToBounds = true
-        emojiBackgroundView.backgroundColor = UIColor(resource: .trackerWhite).withAlphaComponent(0.3)
-        
-       // emojiLabel.font = UIFont.systemFont(ofSize: 16, weight: .medium)
-        
-        trackerButton.tintColor = UIColor(resource: .trackerWhite)
-        
-    }
-    
-    private func setupConstraints() {
-        cardView.translatesAutoresizingMaskIntoConstraints = false
-        emojiBackgroundView.translatesAutoresizingMaskIntoConstraints = false
-        emojiLabel.translatesAutoresizingMaskIntoConstraints = false
-        titleLabel.translatesAutoresizingMaskIntoConstraints = false
-        daysCountLabel.translatesAutoresizingMaskIntoConstraints = false
-        trackerButton.translatesAutoresizingMaskIntoConstraints = false
         
         NSLayoutConstraint.activate([
             cardView.topAnchor.constraint(equalTo: contentView.topAnchor),
             cardView.heightAnchor.constraint(equalToConstant: 90),
             cardView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
-            cardView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
-            
+            cardView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor)
+        ])
+    }
+    
+    private func setupEmoji() {
+        cardView.addSubview(emojiBackgroundView)
+        emojiBackgroundView.translatesAutoresizingMaskIntoConstraints = false
+        emojiBackgroundView.layer.cornerRadius = 12
+        emojiBackgroundView.clipsToBounds = true
+        emojiBackgroundView.backgroundColor = UIColor(resource: .trackerWhite).withAlphaComponent(0.3)
+        
+        emojiBackgroundView.addSubview(emojiLabel)
+        emojiLabel.translatesAutoresizingMaskIntoConstraints = false
+        emojiLabel.font = UIFont.systemFont(ofSize: 16, weight: .medium)
+        
+        NSLayoutConstraint.activate([
             emojiBackgroundView.topAnchor.constraint(equalTo: cardView.topAnchor, constant: 12),
             emojiBackgroundView.leadingAnchor.constraint(equalTo: cardView.leadingAnchor, constant: 12),
             emojiBackgroundView.widthAnchor.constraint(equalToConstant: 24),
             emojiBackgroundView.heightAnchor.constraint(equalToConstant: 24),
             
             emojiLabel.centerXAnchor.constraint(equalTo: emojiBackgroundView.centerXAnchor),
-            emojiLabel.centerYAnchor.constraint(equalTo: emojiBackgroundView.centerYAnchor),
-            
+            emojiLabel.centerYAnchor.constraint(equalTo: emojiBackgroundView.centerYAnchor)
+        ])
+    }
+    
+    private func setupTitleLabel() {
+        cardView.addSubview(titleLabel)
+        titleLabel.translatesAutoresizingMaskIntoConstraints = false
+        titleLabel.textColor = UIColor(resource: .trackerWhite)
+        titleLabel.font = .systemFont(ofSize: 12, weight: .medium)
+        titleLabel.textAlignment = .left
+        titleLabel.contentMode = .bottomLeft
+        
+        NSLayoutConstraint.activate([
             titleLabel.leadingAnchor.constraint(equalTo: cardView.leadingAnchor, constant: 12),
             titleLabel.trailingAnchor.constraint(equalTo: cardView.trailingAnchor, constant: -12),
             titleLabel.topAnchor.constraint(equalTo: emojiBackgroundView.bottomAnchor, constant: 8),
-            titleLabel.bottomAnchor.constraint(equalTo: cardView.bottomAnchor, constant: -12),
-            
-            trackerButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -12),
-            trackerButton.topAnchor.constraint(equalTo: cardView.bottomAnchor, constant: 8),
-            trackerButton.widthAnchor.constraint(equalToConstant: 34),
-            trackerButton.heightAnchor.constraint(equalToConstant: 34),
-            
+            titleLabel.bottomAnchor.constraint(equalTo: cardView.bottomAnchor, constant: -12)
+        ])
+    }
+    
+    private func setupDaysCountLabel() {
+        contentView.addSubview(daysCountLabel)
+        daysCountLabel.translatesAutoresizingMaskIntoConstraints = false
+        daysCountLabel.textColor = UIColor(resource: .trackerBlack)
+        daysCountLabel.font = UIFont.systemFont(ofSize: 12, weight: .medium)
+        
+        NSLayoutConstraint.activate([
             daysCountLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 12),
             daysCountLabel.topAnchor.constraint(equalTo: cardView.bottomAnchor, constant: 16),
             daysCountLabel.widthAnchor.constraint(equalToConstant: 100),
             daysCountLabel.heightAnchor.constraint(equalToConstant: 18)
+        ])
+    }
+    
+    private func setupTrackerButton() {
+        contentView.addSubview(trackerButton)
+        trackerButton.translatesAutoresizingMaskIntoConstraints = false
+        trackerButton.layer.cornerRadius = 17
+        trackerButton.clipsToBounds = true
+        trackerButton.tintColor = UIColor(resource: .trackerWhite)
+        trackerButton.backgroundColor = cardView.backgroundColor
+        
+        trackerButton.addTarget(self, action: #selector(didTapTrackerButton), for: .touchUpInside)
+        
+        NSLayoutConstraint.activate([
+            trackerButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -12),
+            trackerButton.topAnchor.constraint(equalTo: cardView.bottomAnchor, constant: 8),
+            trackerButton.widthAnchor.constraint(equalToConstant: 34),
+            trackerButton.heightAnchor.constraint(equalToConstant: 34),
         ])
     }
     
@@ -98,6 +127,7 @@ final class TrackersCollectionViewCell: UICollectionViewCell {
         daysCountLabel.text = "\(completedDays) дней"
         
         let buttonIcon = isCompleted ? "checkmark" : "plus"
+        
         trackerButton.setImage(UIImage(systemName: buttonIcon), for: .normal)
     }
     
