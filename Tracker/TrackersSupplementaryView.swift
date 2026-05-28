@@ -24,12 +24,13 @@ final class TrackersSupplementaryView: UICollectionReusableView {
         headerLabel.translatesAutoresizingMaskIntoConstraints = false
         headerLabel.font = .systemFont(ofSize: 19, weight: .bold)
         headerLabel.textColor = UIColor(resource: .trackerBlack)
+        headerLabel.numberOfLines = 0
         
         NSLayoutConstraint.activate([
             headerLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 28),
             headerLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -28),
-            headerLabel.topAnchor.constraint(equalTo: topAnchor),
-            headerLabel.bottomAnchor.constraint(equalTo: bottomAnchor)
+            headerLabel.topAnchor.constraint(equalTo: topAnchor, constant: 16),
+            headerLabel.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -12)
         ])
     }
 }

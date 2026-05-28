@@ -7,8 +7,21 @@ final class TrackersViewController: UIViewController {
     private lazy var emptyScreenLabel = UILabel()
     
     private var categories: [TrackerCategory] = []
-    private var completedTrackers: [TrackerRecord] = []
-    private var selectedDate = Date()
+    private var completedTrackers: Set<TrackerRecord> = []
+    private var currentDate = Date()
+    
+    private var visibleCategories: [TrackerCategory] {
+        let calendar = Calendar.current
+        let weekDay = calendar.component(.weekday, from: currentDate)
+        
+        return categories.map { category in
+            let filteredTrackers = category.trackers.filter { tracker in
+                tracker.schedule.contains(weekDay)
+            }
+            return TrackerCategory(title: category.title, trackers: filteredTrackers)
+        }
+        .filter { !$0.trackers.isEmpty}
+    }
     
     private var collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
@@ -32,32 +45,21 @@ final class TrackersViewController: UIViewController {
         setupCollectionView()
         setupPlaceholder()
         updatePlaceholder()
-        
-        let tracker = Tracker(
-            id: UUID(),
-            name: "Покормить котейку",
-            color: .systemBlue,
-            icon: "🐱"
-        )
-        
-        let category = TrackerCategory(
-            title: "Дом",
-            trackers: [tracker]
-        )
+    }
+    
+    // MARK: - Private Methods
+    private func setupMockData() {
+        let tracker = Tracker(id: UUID(), name: "Покормить котейку", color: .systemBlue, icon: "🐱", schedule: [0, 1, 2, 3, 4, 5, 6])
+        let category = TrackerCategory(title: "Дом", trackers: [tracker])
         
         categories = [category]
         updatePlaceholder()
         collectionView.reloadData()
     }
     
-    // MARK: - Private Methods
-    private func completeTracker(id: UUID, date: Date) {
+    private func completeTracker(id: UUID, date: Date) -> Bool {
         let record = TrackerRecord(trackerId: id, date: date)
-        completedTrackers.append(record)
-    }
-    
-    private func uncompleteTracker(id: UUID, date: Date) {
-        //TODO: написать реализацию удаления трекера из массива выполненых
+        return completedTrackers.contains(record)
     }
     
     private func addTracker(_ tracker: Tracker, to categoryTitle: String) {
@@ -90,18 +92,16 @@ final class TrackersViewController: UIViewController {
     }
     
     private func toggleTracker(id: UUID, date: Date) {
-        guard date <= Date() else { return }
-        if let index = completedTrackers.firstIndex(where: {
-            $0.trackerId == id && Calendar.current.isDate($0.date, inSameDayAs: date)
-        }) {
-            completedTrackers.remove(at: index)
+        let record = TrackerRecord(trackerId: id, date: date)
+        if completedTrackers.contains(record) {
+            completedTrackers.remove(record)
         } else {
-            completedTrackers.append(TrackerRecord(trackerId: id, date: date))
+            completedTrackers.insert(record)
         }
     }
     
     private func updatePlaceholder() {
-        let isEmpty = categories.isEmpty
+        let isEmpty = visibleCategories.isEmpty
         
         emptyScreenImage.isHidden = !isEmpty
         emptyScreenLabel.isHidden = !isEmpty
@@ -109,12 +109,16 @@ final class TrackersViewController: UIViewController {
     }
     
     @objc private func didTapAddTrackerButton() {
-        //TODO: написать реализацию добавления трекера
+        let viewController = AddTrackerViewController()
+        viewController.modalPresentationStyle = .pageSheet
+        present(viewController, animated: true)
+        
     }
     
     @objc private func datePickerValueChanged(_ sender: UIDatePicker) {
-        selectedDate = sender.date
+        currentDate = sender.date
         collectionView.reloadData()
+        updatePlaceholder()
     }
 }
 
@@ -208,11 +212,11 @@ extension TrackersViewController {
 //MARK: - CollectionViewDataSource
 extension TrackersViewController: UICollectionViewDataSource {
     func numberOfSections(in collectionView: UICollectionView) -> Int {
-        categories.count
+        visibleCategories.count
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        categories[section].trackers.count
+        visibleCategories[section].trackers.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -220,16 +224,19 @@ extension TrackersViewController: UICollectionViewDataSource {
             return UICollectionViewCell()
         }
         
-        let tracker = categories[indexPath.section].trackers[indexPath.item]
+        let tracker = visibleCategories[indexPath.section].trackers[indexPath.item]
         
-        let isTrackerCompleted = isCompleted(trackerId: tracker.id, date: selectedDate)
+        let isTrackerCompleted = isCompleted(trackerId: tracker.id, date: currentDate)
         let completedDaysCount = completedDays(for: tracker.id)
         
         cell.configure(with: tracker, completedDays: completedDaysCount, isCompleted: isTrackerCompleted)
-        cell.onToggle = { [weak self] in
-            guard let self else { return }
+        cell.onToggle = { [weak self, weak cell] in
+            guard let self,
+                  let cell,
+                  let indexPath = self.collectionView.indexPath(for: cell)
+            else { return }
             
-            self.toggleTracker(id: tracker.id, date: self.selectedDate)
+            self.toggleTracker(id: tracker.id, date: self.currentDate)
             self.collectionView.reloadItems(at: [indexPath])
         }
         return cell
@@ -250,6 +257,7 @@ extension TrackersViewController: UICollectionViewDataSource {
 
 //MARK: - CollectionViewDelegateFlowLayout
 extension TrackersViewController: UICollectionViewDelegateFlowLayout {
+    
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         let horizontalInsets: CGFloat = 16
         let spacingBetweenCells: CGFloat = 9

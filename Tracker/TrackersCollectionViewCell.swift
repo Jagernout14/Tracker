@@ -26,6 +26,20 @@ final class TrackersCollectionViewCell: UICollectionViewCell {
         fatalError("Ошибка инициализации TrackersCollectionViewCell")
     }
     
+    // MARK: - Public Methods
+    func configure(with tracker: Tracker, completedDays: Int, isCompleted: Bool) {
+        cardView.backgroundColor = tracker.color
+        trackerButton.backgroundColor = tracker.color
+        emojiLabel.text = tracker.icon
+        titleLabel.text = tracker.name
+        daysCountLabel.text = "\(completedDays) дней"
+        
+        let buttonIcon = isCompleted ? "checkmark" : "plus"
+        
+        trackerButton.setImage(UIImage(systemName: buttonIcon), for: .normal)
+        trackerButton.alpha = isCompleted ? 0.3 : 1.0
+    }
+    
     // MARK: - Private Methods
     private func setupCell() {
         setupCardView()
@@ -117,18 +131,6 @@ final class TrackersCollectionViewCell: UICollectionViewCell {
             trackerButton.widthAnchor.constraint(equalToConstant: 34),
             trackerButton.heightAnchor.constraint(equalToConstant: 34),
         ])
-    }
-    
-    func configure(with tracker: Tracker, completedDays: Int, isCompleted: Bool) {
-        cardView.backgroundColor = tracker.color
-        trackerButton.backgroundColor = tracker.color
-        emojiLabel.text = tracker.icon
-        titleLabel.text = tracker.name
-        daysCountLabel.text = "\(completedDays) дней"
-        
-        let buttonIcon = isCompleted ? "checkmark" : "plus"
-        
-        trackerButton.setImage(UIImage(systemName: buttonIcon), for: .normal)
     }
     
     @objc private func didTapTrackerButton() {
