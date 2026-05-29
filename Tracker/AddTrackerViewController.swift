@@ -2,13 +2,16 @@ import UIKit
 
 final class AddTrackerViewController: UIViewController {
     // MARK: - Private Properties
-    private let headerLabel = UILabel()
-    private let searchField = UITextField()
-    private let cancelButton = UIButton()
-    private let createButton = UIButton()
+    lazy private var headerLabel = UILabel()
+    lazy private var searchField = UITextField()
+    lazy private var cancelButton = UIButton()
+    lazy private var createButton = UIButton()
     
     private let tableView = UITableView(frame: .zero, style: .plain)
     private let options = ["Категория", "Расписание"]
+    
+    private var selectedSchedule: Set<WeekDays> = []
+    var onCreateTracker: ((Tracker) -> Void)?
     
     //MARK: - ViewDidLoad
     override func viewDidLoad() {
@@ -22,15 +25,35 @@ final class AddTrackerViewController: UIViewController {
         setupCreateButton()
         setupTableView()
         searchField.delegate = self
+        searchField.addTarget(self, action: #selector(textFieldDidChange), for: .editingChanged)
+        
+        updateCreateButtonState()
     }
     
     // MARK: - Private Methods
+    private func updateCreateButtonState() {
+        let text = searchField.text?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
+        let isValid = !text.isEmpty
+        
+        createButton.isEnabled = isValid
+        createButton.backgroundColor = isValid ? UIColor(resource: .trackerBlack) : UIColor(resource: .trackerDarkGray)
+    }
+    
+    @objc private func textFieldDidChange() {
+        updateCreateButtonState()
+    }
+    
     @objc private func didTapCancelButton() {
         dismiss(animated: true)
     }
     
     @objc private func didTapCreateButton() {
-        //TODO: Написать реализацию
+        guard let text = searchField.text?.trimmingCharacters(in: .whitespacesAndNewlines), !text.isEmpty else { return }
+        
+        let tracker = Tracker(id: UUID(), name: text, color: .systemCyan, icon: "🙌", schedule: [0, 1, 2, 3, 4, 5, 6])
+        
+        onCreateTracker?(tracker)
+        dismiss(animated: true)
     }
     
     //MARK: - UI Setup
@@ -54,6 +77,7 @@ final class AddTrackerViewController: UIViewController {
         searchField.layer.cornerRadius = 16
         searchField.leftView = UIView(frame: CGRect(x: 0, y: 0, width: 16, height: 0))
         searchField.leftViewMode = .always
+        searchField.isUserInteractionEnabled = true
         
         view.addSubview(searchField)
         searchField.translatesAutoresizingMaskIntoConstraints = false
@@ -90,6 +114,7 @@ final class AddTrackerViewController: UIViewController {
         createButton.setTitle("Создать", for: .normal)
         createButton.setTitleColor(UIColor(resource: .trackerWhite), for: .normal)
         createButton.titleLabel?.font = .systemFont(ofSize: 16, weight: .medium)
+        createButton.isEnabled = false
         createButton.backgroundColor = UIColor(resource: .trackerDarkGray)
         createButton.layer.cornerRadius = 16
         
@@ -182,6 +207,11 @@ extension AddTrackerViewController: UITableViewDelegate {
         case 1:
             let viewController = ScheduleViewController()
             viewController.modalPresentationStyle = .pageSheet
+            
+            viewController.onScheduleSelected = {[weak self] days in
+                self?.selectedSchedule = days
+            }
+            
             present(viewController, animated: true)
         default:
             break

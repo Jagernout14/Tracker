@@ -3,10 +3,12 @@ import UIKit
 final class ScheduleViewController: UIViewController {
     
     // MARK: - Private Properties
-    private let headerLabel = UILabel()
-    private let doneButton = UIButton()
+    lazy private var headerLabel = UILabel()
+    lazy private var doneButton = UIButton()
+    
     private let tableView = UITableView(frame: .zero, style: .plain)
     
+    var onScheduleSelected: ((Set<WeekDays>) -> Void)?
     private var selectedDays: Set<WeekDays> = []
     
     //MARK: - ViewDidLoad
@@ -24,8 +26,14 @@ final class ScheduleViewController: UIViewController {
         dismiss(animated: true)
     }
     
-    @objc private func switchToggle() {
+    @objc private func switchToggle(_ sender: UISwitch) {
+        guard let day = WeekDays(rawValue: sender.tag) else { return }
         
+        if sender.isOn {
+            selectedDays.insert(day)
+        } else {
+            selectedDays.remove(day)
+        }
     }
     
     //MARK: UI Setup
@@ -109,7 +117,7 @@ extension ScheduleViewController: UITableViewDataSource {
         switchView.onTintColor = UIColor(resource: .trackerBlue)
         switchView.tag = indexPath.row
         
-        switchView.addTarget(self, action: #selector(switchToggle), for: .valueChanged)
+        switchView.addTarget(self, action: #selector(switchToggle(_:)), for: .valueChanged)
         
         cell.accessoryView = switchView
         
@@ -122,13 +130,12 @@ extension ScheduleViewController: UITableViewDataSource {
             background.layer.cornerRadius = 16
             background.layer.maskedCorners = [.layerMinXMaxYCorner, .layerMaxXMaxYCorner]
             background.layer.masksToBounds = true
-        }
-        
-        if indexPath.row == 6 {
+            
             cell.separatorInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: .greatestFiniteMagnitude)
         } else {
             cell.separatorInset = UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 16)
         }
+        
         cell.backgroundView = background
         
         return cell

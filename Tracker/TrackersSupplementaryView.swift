@@ -4,7 +4,7 @@ final class TrackersSupplementaryView: UICollectionReusableView {
     
     static let identifier = Identifiers.TrackersSupplementaryView.headerReuseIdentifier
     
-    private let headerLabel = UILabel()
+    lazy private var headerLabel = UILabel()
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -12,7 +12,7 @@ final class TrackersSupplementaryView: UICollectionReusableView {
     }
     
     required init?(coder: NSCoder) {
-        fatalError("Ошибка инициализации TrackersSupplementaryView")
+        nil
     }
     
     func configure(with title: String) {

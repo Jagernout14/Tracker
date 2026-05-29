@@ -23,7 +23,7 @@ final class TrackersCollectionViewCell: UICollectionViewCell {
     }
     
     required init?(coder: NSCoder) {
-        fatalError("Ошибка инициализации TrackersCollectionViewCell")
+        nil
     }
     
     // MARK: - Public Methods
@@ -34,7 +34,7 @@ final class TrackersCollectionViewCell: UICollectionViewCell {
         titleLabel.text = tracker.name
         daysCountLabel.text = "\(completedDays) дней"
         
-        let buttonIcon = isCompleted ? "checkmark" : "plus"
+        let buttonIcon = TrackerButtonIcons.icon(for: isCompleted).rawValue
         
         trackerButton.setImage(UIImage(systemName: buttonIcon), for: .normal)
         trackerButton.alpha = isCompleted ? 0.3 : 1.0
@@ -91,13 +91,13 @@ final class TrackersCollectionViewCell: UICollectionViewCell {
         titleLabel.textColor = UIColor(resource: .trackerWhite)
         titleLabel.font = .systemFont(ofSize: 12, weight: .medium)
         titleLabel.textAlignment = .left
-        titleLabel.contentMode = .bottomLeft
+        titleLabel.numberOfLines = 2
         
         NSLayoutConstraint.activate([
             titleLabel.leadingAnchor.constraint(equalTo: cardView.leadingAnchor, constant: 12),
             titleLabel.trailingAnchor.constraint(equalTo: cardView.trailingAnchor, constant: -12),
-            titleLabel.topAnchor.constraint(equalTo: emojiBackgroundView.bottomAnchor, constant: 8),
-            titleLabel.bottomAnchor.constraint(equalTo: cardView.bottomAnchor, constant: -12)
+            titleLabel.bottomAnchor.constraint(equalTo: cardView.bottomAnchor, constant: -6),
+            titleLabel.heightAnchor.constraint(equalToConstant: 34)
         ])
     }
     

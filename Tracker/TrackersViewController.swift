@@ -10,18 +10,7 @@ final class TrackersViewController: UIViewController {
     private var completedTrackers: Set<TrackerRecord> = []
     private var currentDate = Date()
     
-    private var visibleCategories: [TrackerCategory] {
-        let calendar = Calendar.current
-        let weekDay = calendar.component(.weekday, from: currentDate)
-        
-        return categories.map { category in
-            let filteredTrackers = category.trackers.filter { tracker in
-                tracker.schedule.contains(weekDay)
-            }
-            return TrackerCategory(title: category.title, trackers: filteredTrackers)
-        }
-        .filter { !$0.trackers.isEmpty}
-    }
+    private var visibleCategories: [TrackerCategory] = []
     
     private var collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
@@ -35,7 +24,7 @@ final class TrackersViewController: UIViewController {
     }
     
     required init?(coder: NSCoder) {
-        fatalError("Ошибка инициализации TrackersViewController")
+        nil
     }
     
     // MARK: - Overrides Methods
@@ -45,16 +34,22 @@ final class TrackersViewController: UIViewController {
         setupCollectionView()
         setupPlaceholder()
         updatePlaceholder()
+        setupMockData()
     }
     
     // MARK: - Private Methods
     private func setupMockData() {
         let tracker = Tracker(id: UUID(), name: "Покормить котейку", color: .systemBlue, icon: "🐱", schedule: [0, 1, 2, 3, 4, 5, 6])
         let category = TrackerCategory(title: "Дом", trackers: [tracker])
-        
         categories = [category]
-        updatePlaceholder()
+        
+        applyFiltering()
         collectionView.reloadData()
+        updatePlaceholder()
+    }
+    
+    private func applyFiltering() {
+        visibleCategories = categories
     }
     
     private func completeTracker(id: UUID, date: Date) -> Bool {
@@ -111,8 +106,17 @@ final class TrackersViewController: UIViewController {
     @objc private func didTapAddTrackerButton() {
         let viewController = AddTrackerViewController()
         viewController.modalPresentationStyle = .pageSheet
-        present(viewController, animated: true)
         
+        viewController.onCreateTracker = { [weak self] tracker in
+            guard let self else { return }
+            
+            self.addTracker(tracker, to: "Дом")
+            self.applyFiltering()
+            self.collectionView.reloadData()
+            self.updatePlaceholder()
+        }
+        
+        present(viewController, animated: true)
     }
     
     @objc private func datePickerValueChanged(_ sender: UIDatePicker) {
