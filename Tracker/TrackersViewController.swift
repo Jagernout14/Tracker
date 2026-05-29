@@ -51,7 +51,17 @@ final class TrackersViewController: UIViewController {
     }
     
     private func applyFiltering() {
-        visibleCategories = categories
+        let weekDay = Calendar.current.component(.weekday, from: currentDate) - 1
+        
+        visibleCategories = categories.compactMap { category in
+            let filteredTrackers = category.trackers.filter { tracker in
+                tracker.schedule.contains(weekDay)
+            }
+            guard !filteredTrackers.isEmpty else {
+                return nil
+            }
+            return TrackerCategory(title: category.title, trackers: filteredTrackers)
+        }
     }
     
     private func completeTracker(id: UUID, date: Date) -> Bool {
@@ -265,6 +275,11 @@ extension TrackersViewController: UICollectionViewDataSource {
                   let cell,
                   let indexPath = self.collectionView.indexPath(for: cell)
             else { return }
+            
+            let calendar = Calendar.current
+            if self.currentDate > Date() && !calendar.isDate(self.currentDate, inSameDayAs: Date()) {
+                return
+            }
             
             self.toggleTracker(id: tracker.id, date: self.currentDate)
             self.collectionView.reloadItems(at: [indexPath])
