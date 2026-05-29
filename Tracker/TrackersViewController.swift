@@ -5,6 +5,7 @@ final class TrackersViewController: UIViewController {
     // MARK: - Private Properties
     private lazy var emptyScreenImage = UIImageView()
     private lazy var emptyScreenLabel = UILabel()
+    private lazy var filtersButton = UIButton()
     
     private var categories: [TrackerCategory] = []
     private var completedTrackers: Set<TrackerRecord> = []
@@ -35,6 +36,7 @@ final class TrackersViewController: UIViewController {
         setupPlaceholder()
         updatePlaceholder()
         setupMockData()
+        setupFilterButton()
     }
     
     // MARK: - Private Methods
@@ -124,6 +126,10 @@ final class TrackersViewController: UIViewController {
         collectionView.reloadData()
         updatePlaceholder()
     }
+    
+    @objc private func didTapFiltersButton() {
+        
+    }
 }
 
 //MARK: - Setup UI
@@ -200,6 +206,26 @@ extension TrackersViewController {
         
         emptyScreenLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
         emptyScreenLabel.topAnchor.constraint(equalTo: emptyScreenImage.bottomAnchor, constant: 8).isActive = true
+    }
+    
+    private func setupFilterButton() {
+        filtersButton.setTitle("Фильтры", for: .normal)
+        filtersButton.setTitleColor(UIColor(resource: .trackerWhite), for: .normal)
+        filtersButton.titleLabel?.font = .systemFont(ofSize: 17, weight: .regular)
+        filtersButton.backgroundColor = UIColor(resource: .trackerBlue)
+        filtersButton.layer.cornerRadius = 16
+        filtersButton.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(filtersButton)
+        view.bringSubviewToFront(filtersButton)
+        
+        filtersButton.addTarget(self, action: #selector(didTapFiltersButton), for: .touchUpInside)
+        
+        NSLayoutConstraint.activate([
+            filtersButton.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor),
+            filtersButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -16),
+            filtersButton.heightAnchor.constraint(equalToConstant: 50),
+            filtersButton.widthAnchor.constraint(equalToConstant: 114)
+        ])
     }
     
     private func setupUI() {
