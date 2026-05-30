@@ -23,6 +23,7 @@ final class ScheduleViewController: UIViewController {
     
     // MARK: - Private Methods
     @objc private func didTapDoneButton() {
+        onScheduleSelected?(selectedDays)
         dismiss(animated: true)
     }
     

@@ -2,16 +2,17 @@ import UIKit
 
 final class AddTrackerViewController: UIViewController {
     // MARK: - Private Properties
-    lazy private var headerLabel = UILabel()
-    lazy private var searchField = UITextField()
-    lazy private var cancelButton = UIButton()
-    lazy private var createButton = UIButton()
+    private lazy var headerLabel = UILabel()
+    private lazy var searchField = UITextField()
+    private lazy var cancelButton = UIButton()
+    private lazy var createButton = UIButton()
     
     private let tableView = UITableView(frame: .zero, style: .plain)
     private let options = ["Категория", "Расписание"]
     
     private var selectedSchedule: Set<WeekDays> = []
     var onCreateTracker: ((Tracker) -> Void)?
+    private var scheduleText: String?
     
     //MARK: - ViewDidLoad
     override func viewDidLoad() {
@@ -50,7 +51,7 @@ final class AddTrackerViewController: UIViewController {
     @objc private func didTapCreateButton() {
         guard let text = searchField.text?.trimmingCharacters(in: .whitespacesAndNewlines), !text.isEmpty else { return }
         
-        let tracker = Tracker(id: UUID(), name: text, color: .systemCyan, icon: "🙌", schedule: [0, 1, 2, 3, 4, 5, 6])
+        let tracker = Tracker(id: UUID(), name: text, color: .systemCyan, icon: "🙌", schedule: selectedSchedule.map(\.rawValue))
         
         onCreateTracker?(tracker)
         dismiss(animated: true)
@@ -166,9 +167,13 @@ extension AddTrackerViewController: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = UITableViewCell(style: .default, reuseIdentifier: nil)
+        let cell = UITableViewCell(style: .subtitle, reuseIdentifier: nil)
         
         cell.textLabel?.text = options[indexPath.row]
+        if indexPath.row == 1 {
+            cell.detailTextLabel?.text = scheduleText
+            cell.detailTextLabel?.textColor = UIColor(resource: .trackerDarkGray)
+        }
         cell.accessoryType = .disclosureIndicator
         
         cell.backgroundColor = .clear
@@ -210,6 +215,12 @@ extension AddTrackerViewController: UITableViewDelegate {
             
             viewController.onScheduleSelected = {[weak self] days in
                 self?.selectedSchedule = days
+                let sortedDays = days.sorted { $0.rawValue < $1.rawValue }
+                self?.scheduleText = sortedDays
+                    .map { $0.shortName }
+                    .joined(separator: ", ")
+                
+                self?.tableView.reloadRows(at: [IndexPath(row: 1, section: 0)], with: .none)
             }
             
             present(viewController, animated: true)

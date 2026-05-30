@@ -36,12 +36,12 @@ final class TrackersViewController: UIViewController {
         setupPlaceholder()
         updatePlaceholder()
         setupMockData()
-        setupFilterButton()
+        //  setupFilterButton()
     }
     
     // MARK: - Private Methods
     private func setupMockData() {
-        let tracker = Tracker(id: UUID(), name: "Покормить котейку", color: .systemBlue, icon: "🐱", schedule: [0, 1, 2, 3, 4, 5, 6])
+        let tracker = Tracker(id: UUID(), name: "Покормить котейку", color: .systemBlue, icon: "🐱", schedule: [0, 6])
         let category = TrackerCategory(title: "Дом", trackers: [tracker])
         categories = [category]
         
@@ -51,16 +51,25 @@ final class TrackersViewController: UIViewController {
     }
     
     private func applyFiltering() {
-        let weekDay = Calendar.current.component(.weekday, from: currentDate) - 1
+        let calendarWeekday = Calendar.current.component(.weekday, from: currentDate)
+        
+        guard let weekDay = WeekDays.from(calendarWeekday: calendarWeekday) else {
+            return
+        }
         
         visibleCategories = categories.compactMap { category in
             let filteredTrackers = category.trackers.filter { tracker in
-                tracker.schedule.contains(weekDay)
+                tracker.schedule.contains(weekDay.rawValue)
             }
+            
             guard !filteredTrackers.isEmpty else {
                 return nil
             }
-            return TrackerCategory(title: category.title, trackers: filteredTrackers)
+            
+            return TrackerCategory(
+                title: category.title,
+                trackers: filteredTrackers
+            )
         }
     }
     
@@ -133,6 +142,7 @@ final class TrackersViewController: UIViewController {
     
     @objc private func datePickerValueChanged(_ sender: UIDatePicker) {
         currentDate = sender.date
+        applyFiltering()
         collectionView.reloadData()
         updatePlaceholder()
     }

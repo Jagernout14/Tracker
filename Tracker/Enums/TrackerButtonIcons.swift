@@ -9,7 +9,7 @@ enum TrackerButtonIcons: String {
     case completed = "checkmark"
     
     static func icon(for isCompleted: Bool) -> TrackerButtonIcons {
-        return isCompleted ? .completed : .add
+        isCompleted ? .completed : .add
     }
 }
 
