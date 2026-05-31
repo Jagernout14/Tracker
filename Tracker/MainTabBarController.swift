@@ -11,12 +11,12 @@ final class MainTabBarController: UITabBarController {
         let trackersViewController = TrackersViewController()
         let statisticViewController = StatisticViewController()
         
-        let trackersTabBarItem = UITabBarItem(title: "Трекеры", image: UIImage(resource: .trackerIcon), selectedImage: nil)
-        trackersViewController.tabBarItem = trackersTabBarItem
+        let trackersNavigationController = UINavigationController(rootViewController: trackersViewController)
+        let statisticNavigationController = UINavigationController(rootViewController: statisticViewController)
         
-        let statisticTabBarItem = UITabBarItem(title: "Статистика", image: UIImage(resource: .statisticIcon), selectedImage: nil)
-        statisticViewController.tabBarItem = statisticTabBarItem
+        trackersNavigationController.tabBarItem = UITabBarItem(title: "Трекеры", image: UIImage(resource: .trackerIcon), selectedImage: nil)
+        statisticNavigationController.tabBarItem = UITabBarItem(title: "Статистика", image: UIImage(resource: .statisticIcon), selectedImage: nil)
         
-        viewControllers = [trackersViewController, statisticViewController]
+        viewControllers = [trackersNavigationController, statisticNavigationController]
     }
 }
