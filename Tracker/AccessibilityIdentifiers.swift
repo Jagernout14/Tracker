@@ -11,6 +11,18 @@ struct Identifiers {
     }
     
     struct TrackersSupplementaryView {
-        static let headerReuseIdentifier = "TrackersSupplementaryViewHeader"
+        static let headerReuseIdentifier = "trackersSupplementaryViewHeader"
+    }
+    
+    struct AddTrackerEmojiCollectionViewCell {
+        static let cellReuseIdentifier = "emojiCell"
+    }
+    
+    struct AddTrackerColorCollectionViewCell {
+        static let cellReuseIdentifier = "colorCell"
+    }
+    
+    struct AddTrackerSupplementaryView {
+        static let headerReuseIdentifier = "header"
     }
 }
