@@ -1,4 +1,4 @@
-enum WeekDays: Int, CaseIterable {
+enum WeekDays: Int, CaseIterable, Codable {
     case monday = 0
     case tuesday
     case wednesday
@@ -43,6 +43,4 @@ enum WeekDays: Int, CaseIterable {
         default: return nil
         }
     }
-    
-    
 }

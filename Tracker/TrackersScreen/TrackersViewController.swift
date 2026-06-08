@@ -42,7 +42,7 @@ final class TrackersViewController: UIViewController {
     
     // MARK: - Private Methods
     private func setupMockData() {
-        let tracker = Tracker(id: UUID(), name: "Покормить котейку", color: .systemBlue, icon: "🐱", schedule: [0, 6])
+        let tracker = Tracker(id: UUID(), name: "Покормить котейку", color: .systemBlue, icon: "🐱", schedule: [.monday, .saturday])
         let category = TrackerCategory(title: "Дом", trackers: [tracker])
         categories = [category]
         
@@ -60,7 +60,7 @@ final class TrackersViewController: UIViewController {
         
         visibleCategories = categories.compactMap { category in
             let filteredTrackers = category.trackers.filter { tracker in
-                tracker.schedule.contains(weekDay.rawValue)
+                tracker.schedule.contains(weekDay)
             }
             
             guard !filteredTrackers.isEmpty else {
