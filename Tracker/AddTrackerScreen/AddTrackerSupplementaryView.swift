@@ -1,8 +1,15 @@
+//
+//  AddTrackerSupplementaryView.swift
+//  Tracker
+//
+//  Created by Роман Пичугин on 01.06.2026.
+//
+
 import UIKit
 
-final class TrackersSupplementaryView: UICollectionReusableView {
+final class AddTrackerSupplementaryView: UICollectionReusableView {
     
-    static let identifier = Identifiers.TrackersSupplementaryView.headerReuseIdentifier
+    static let identifier = Identifiers.AddTrackerSupplementaryView.headerReuseIdentifier
     
     lazy private var headerLabel = UILabel()
     
@@ -11,6 +18,7 @@ final class TrackersSupplementaryView: UICollectionReusableView {
         setupHeader()
     }
     
+    @available(*, unavailable)
     required init?(coder: NSCoder) {
         nil
     }
@@ -19,6 +27,7 @@ final class TrackersSupplementaryView: UICollectionReusableView {
         headerLabel.text = title
     }
     
+    //MARK: - Setup UI
     private func setupHeader() {
         addSubview(headerLabel)
         headerLabel.translatesAutoresizingMaskIntoConstraints = false
@@ -27,10 +36,10 @@ final class TrackersSupplementaryView: UICollectionReusableView {
         headerLabel.numberOfLines = 0
         
         NSLayoutConstraint.activate([
-            headerLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 28),
-            headerLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -28),
-            headerLabel.topAnchor.constraint(equalTo: topAnchor, constant: 16),
-            headerLabel.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -12)
+            headerLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 12),
+            headerLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -12),
+            headerLabel.topAnchor.constraint(equalTo: topAnchor),
+            headerLabel.heightAnchor.constraint(equalToConstant: 20)
         ])
     }
 }
