@@ -27,10 +27,26 @@ final class AddTrackerViewController: UIViewController {
         "😇", "😡", "🥶", "🤔", "🙌", "🍔",
         "🥦", "🏓", "🥇", "🎸", "🏝", "😪"
     ]
-    private let colors: [UIColor] = [
-        .systemRed, .systemBlue, .systemGreen,
-        .systemOrange, .systemPurple, .systemPink,
-        .systemYellow, .systemTeal
+    
+    private lazy var colors: [UIColor] = [
+        assetColor("CardBiege"),
+        assetColor("CardBiegeDust"),
+        assetColor("CardBlue"),
+        assetColor("CardBlueDust"),
+        assetColor("CardBlueLight"),
+        assetColor("CardGrape"),
+        assetColor("CardGrapeDark"),
+        assetColor("CardGrapeDust"),
+        assetColor("CardGrapeLight"),
+        assetColor("CardGreen"),
+        assetColor("CardGreenBright"),
+        assetColor("CardOrange"),
+        assetColor("CardOrangeBrick"),
+        assetColor("CardPink"),
+        assetColor("CardPinkLight"),
+        assetColor("CardPurple"),
+        assetColor("CardRed"),
+        assetColor("CardTransulent")
     ]
     
     private var selectedSchedule: Set<WeekDays> = []
@@ -66,6 +82,14 @@ final class AddTrackerViewController: UIViewController {
         
         createButton.isEnabled = isValid
         createButton.backgroundColor = isValid ? UIColor(resource: .trackerBlack) : UIColor(resource: .trackerDarkGray)
+    }
+    
+    private func assetColor(_ name: String) -> UIColor {
+        guard let color = UIColor(named: name) else {
+            assertionFailure("Цвет в ассете по имени не нашелся")
+            return .black
+        }
+        return color
     }
     
     @objc private func textFieldDidChange() {
@@ -347,7 +371,7 @@ extension AddTrackerViewController: UICollectionViewDataSource {
         case .emoji:
             return emojiSymbols.count
         case .color:
-            return 8
+            return 18
         }
     }
     
