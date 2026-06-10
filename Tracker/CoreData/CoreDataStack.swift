@@ -17,7 +17,7 @@ final class CoreDataStack {
         let container = NSPersistentContainer(name: "Tracker")
         container.loadPersistentStores(completionHandler: { (storeDescription, error) in
             if let error = error as NSError? {
-                fatalError("Unresolved error \(error), \(error.userInfo)")
+                fatalError("Ошибка persistent Container: \(error), \(error.userInfo)")
             }
         })
         return container
@@ -27,8 +27,14 @@ final class CoreDataStack {
         persistentContainer.viewContext
     }
     
-    func saveContext()  throws {
+    func saveContext() throws {
+        let context = persistentContainer.viewContext
         guard context.hasChanges else { return }
-        try context.save()
+        
+        do {
+            try context.save()
+        } catch {
+            throw error
+        }
     }
 }

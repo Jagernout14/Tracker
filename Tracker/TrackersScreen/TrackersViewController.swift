@@ -7,11 +7,13 @@ final class TrackersViewController: UIViewController {
     private lazy var emptyScreenLabel = UILabel()
     private lazy var filtersButton = UIButton()
     
-    private var categories: [TrackerCategory] = []
     private var completedTrackers: Set<TrackerRecord> = []
     private var currentDate = Date()
     
     private var visibleCategories: [TrackerCategory] = []
+    
+    private let categoryStore = TrackerCategoryStore()
+    private let trackerStore = TrackerStore()
     
     private var collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
@@ -32,25 +34,18 @@ final class TrackersViewController: UIViewController {
     // MARK: - Overrides Methods
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         setupUI()
         setupCollectionView()
         setupPlaceholder()
+        
+        categoryStore.delegate = self
+        
+        loadCategories()
         updatePlaceholder()
-        setupMockData()
-        //  setupFilterButton()
     }
     
     // MARK: - Private Methods
-    private func setupMockData() {
-        let tracker = Tracker(id: UUID(), name: "Покормить котейку", color: .systemBlue, icon: "🐱", schedule: [.monday, .saturday])
-        let category = TrackerCategory(title: "Дом", trackers: [tracker])
-        categories = [category]
-        
-        applyFiltering()
-        collectionView.reloadData()
-        updatePlaceholder()
-    }
-    
     private func applyFiltering() {
         let calendarWeekday = Calendar.current.component(.weekday, from: currentDate)
         
@@ -58,42 +53,22 @@ final class TrackersViewController: UIViewController {
             return
         }
         
-        visibleCategories = categories.compactMap { category in
-            let filteredTrackers = category.trackers.filter { tracker in
-                tracker.schedule.contains(weekDay)
+        let allCategories = categoryStore.fetchCategoriesFromFetchResultController()
+        
+        visibleCategories = allCategories.compactMap { category in
+            let filtered = category.trackers.filter {
+                $0.schedule.contains(weekDay)
             }
             
-            guard !filteredTrackers.isEmpty else {
-                return nil
-            }
+            guard !filtered.isEmpty else { return nil }
             
-            return TrackerCategory(
-                title: category.title,
-                trackers: filteredTrackers
-            )
+            return TrackerCategory(title: category.title, trackers: filtered)
         }
     }
     
     private func completeTracker(id: UUID, date: Date) -> Bool {
         let record = TrackerRecord(trackerId: id, date: date)
         return completedTrackers.contains(record)
-    }
-    
-    private func addTracker(_ tracker: Tracker, to categoryTitle: String) {
-        let updatedCategories = categories.map { category in
-            if category.title == categoryTitle {
-                let updatedTrackers = category.trackers + [tracker]
-                
-                return TrackerCategory(title: category.title, trackers: updatedTrackers)
-            }
-            
-            return category
-        }
-        categories = updatedCategories
-    }
-    
-    private func addCategory(_ category: TrackerCategory) {
-        categories = categories + [category]
     }
     
     private func isCompleted(trackerId: UUID, date: Date) -> Bool {
@@ -125,6 +100,13 @@ final class TrackersViewController: UIViewController {
         collectionView.isHidden = isEmpty
     }
     
+    private func loadCategories() {
+        visibleCategories = categoryStore.fetchCategoriesFromFetchResultController()
+        applyFiltering()
+        collectionView.reloadData()
+        updatePlaceholder()
+    }
+    
     @objc private func didTapAddTrackerButton() {
         let viewController = AddTrackerViewController()
         viewController.modalPresentationStyle = .pageSheet
@@ -132,10 +114,22 @@ final class TrackersViewController: UIViewController {
         viewController.onCreateTracker = { [weak self] tracker in
             guard let self else { return }
             
-            self.addTracker(tracker, to: "Дом")
-            self.applyFiltering()
-            self.collectionView.reloadData()
-            self.updatePlaceholder()
+            guard let category = self.categoryStore.category(named: "Дом") else {
+                print("Категория не найдена")
+                return
+            }
+            
+            do {
+                try self.trackerStore.addTracker(tracker, category: category)
+                
+                self.loadCategories()
+                self.applyFiltering()
+                self.collectionView.reloadData()
+                self.updatePlaceholder()
+                
+            } catch {
+                print("Ошибка сохранения трекера:", error)
+            }
         }
         
         present(viewController, animated: true)
@@ -339,5 +333,11 @@ extension TrackersViewController: UICollectionViewDelegateFlowLayout {
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
         CGSize(width: collectionView.bounds.width, height: 50)
+    }
+}
+
+extension TrackersViewController: TrackerCategoryStoreDelegate {
+    func storeDidUpdate() {
+        loadCategories()
     }
 }

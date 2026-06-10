@@ -49,6 +49,7 @@ final class AddTrackerViewController: UIViewController {
     //MARK: - ViewDidLoad
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         setupUI()
         view.backgroundColor = UIColor(resource: .trackerWhite)
         

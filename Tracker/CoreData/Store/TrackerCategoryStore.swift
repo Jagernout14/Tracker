@@ -8,29 +8,69 @@
 import CoreData
 import UIKit
 
-final class TrackerCategoryStore {
+protocol TrackerCategoryStoreDelegate: AnyObject {
+    func storeDidUpdate()
+}
+
+final class TrackerCategoryStore: NSObject {
+    
+    // MARK: - Public Properties
+    weak var delegate: TrackerCategoryStoreDelegate?
     
     // MARK: - Private Properties
     private let context: NSManagedObjectContext
+    private var fetchedResultsController: NSFetchedResultsController<TrackerCategoryCoreData>?
     
     // MARK: - Initializers
     init(context: NSManagedObjectContext = CoreDataStack.shared.context) {
         self.context = context
+        super.init()
+        
+        setupFetchedResultsController()
     }
     
     // MARK: - Public Methods
+    func category(named title: String) -> TrackerCategoryCoreData? {
+        fetchedResultsController?.fetchedObjects?.first {
+            $0.title == title
+        }
+    }
+    
     func addCategory(name: String) throws {
+        let request = TrackerCategoryCoreData.fetchRequest()
+        request.predicate = NSPredicate(format: "title == %@", name)
+        request.fetchLimit = 1
+        
+        let existing = try context.fetch(request)
+        
+        guard existing.isEmpty else { return }
+        
         let category = TrackerCategoryCoreData(context: context)
         category.title = name
         
-        try CoreDataStack.shared.saveContext()
+        try context.save()
     }
     
-    func fetchCategories() throws -> [TrackerCategory] {
-        let request = TrackerCategoryCoreData.fetchRequest()
-        let categories = try context.fetch(request)
-        
-        return categories.compactMap(makeCategory)
+    func fetchCategoriesFromFetchResultController() -> [TrackerCategory] {
+        guard let objects = fetchedResultsController?.fetchedObjects else {
+            return []
+        }
+        return objects.compactMap(makeCategory)
+    }
+    
+    func numberOfSections() -> Int {
+        fetchedResultsController?.sections?.count ?? 0
+    }
+    
+    func numberOfItems(in section: Int) -> Int {
+        fetchedResultsController?.sections?[section].numberOfObjects ?? 0
+    }
+    
+    func category( at indexPath: IndexPath) -> TrackerCategoryCoreData {
+        guard let object = fetchedResultsController?.object(at: indexPath) else {
+            fatalError("Обьектов по IndexPath нету")
+        }
+        return object
     }
     
     // MARK: - Private Methods
@@ -54,5 +94,23 @@ final class TrackerCategoryStore {
             return nil
         }
         return Tracker(id: id, name: name, color: color, icon: icon, schedule: schedule)
+    }
+    
+    private func setupFetchedResultsController() {
+        let request = TrackerCategoryCoreData.fetchRequest()
+        
+        request.sortDescriptors = [NSSortDescriptor(key: "title", ascending: true)]
+        
+        fetchedResultsController = NSFetchedResultsController(fetchRequest: request, managedObjectContext: context, sectionNameKeyPath: nil, cacheName: nil)
+        fetchedResultsController?.delegate = self
+        
+        try? fetchedResultsController?.performFetch()
+    }
+}
+
+extension TrackerCategoryStore: NSFetchedResultsControllerDelegate {
+    
+    func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
+        delegate?.storeDidUpdate()
     }
 }

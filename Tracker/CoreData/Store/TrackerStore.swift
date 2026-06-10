@@ -19,12 +19,7 @@ final class TrackerStore {
     }
     
     // MARK: - Public Methods
-    func addTracker(_ tracker: Tracker, categoryTitle: String) throws {
-        let request = TrackerCategoryCoreData.fetchRequest()
-        request.predicate = NSPredicate(format: "title == %@", categoryTitle)
-        
-        guard let category = try context.fetch(request).first else { return }
-        
+    func addTracker(_ tracker: Tracker, category: TrackerCategoryCoreData) throws {
         let object = TrackerCoreData(context: context)
         
         object.id = tracker.id
