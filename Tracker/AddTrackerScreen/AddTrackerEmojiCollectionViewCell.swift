@@ -9,17 +9,13 @@ import UIKit
 
 final class AddTrackerEmojiCollectionViewCell:UICollectionViewCell {
     
+    // MARK: - Public Properties
     static let reuseIdentifier = Identifiers.AddTrackerEmojiCollectionViewCell.cellReuseIdentifier
+    
+    // MARK: - Private Properties
     private let emojiLabel = UILabel()
     
-    override var isSelected: Bool {
-        didSet {
-            contentView.backgroundColor = isSelected ? UIColor(resource: .trackerLightGrey) : .clear
-            contentView.layer.cornerRadius = 16
-            contentView.layer.masksToBounds = true
-        }
-    }
-    
+    // MARK: - Initializers
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupEmojiLabel()
@@ -30,8 +26,18 @@ final class AddTrackerEmojiCollectionViewCell:UICollectionViewCell {
         nil
     }
     
-    func configure(with emoji: String) {
+    // MARK: - Overrides Methods
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        contentView.backgroundColor = .clear
+    }
+    
+    // MARK: - Public Methods
+    func configure(with emoji: String, isSelected: Bool) {
         emojiLabel.text = emoji
+        
+        contentView.backgroundColor = isSelected ? UIColor(resource: .trackerLightGrey) : .clear
+        contentView.layer.cornerRadius = 16
     }
     
     //MARK: - Setup UI
@@ -45,7 +51,4 @@ final class AddTrackerEmojiCollectionViewCell:UICollectionViewCell {
             emojiLabel.centerYAnchor.constraint(equalTo: contentView.centerYAnchor)
         ])
     }
-    
-    
 }
-

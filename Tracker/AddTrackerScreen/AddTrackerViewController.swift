@@ -38,6 +38,9 @@ final class AddTrackerViewController: UIViewController {
     private var selectedColor: UIColor?
     private var scheduleText: String?
     
+    private var selectedEmojiIndexPath: IndexPath?
+    private var selectedColorIndexPath: IndexPath?
+    
     private enum Section: Int, CaseIterable {
         case emoji
         case color
@@ -164,7 +167,6 @@ final class AddTrackerViewController: UIViewController {
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         
         collectionView.isScrollEnabled = false
-        collectionView.allowsMultipleSelection = false
         
         collectionView.dataSource = self
         collectionView.delegate = self
@@ -265,13 +267,12 @@ extension AddTrackerViewController: UITableViewDataSource {
             cell.detailTextLabel?.text = scheduleText
             cell.detailTextLabel?.textColor = UIColor(resource: .trackerDarkGray)
         }
-        cell.accessoryType = .disclosureIndicator
         
+        cell.accessoryType = .disclosureIndicator
         cell.backgroundColor = .clear
         
         let background = UIView()
         background.backgroundColor = UIColor(resource: .trackerGrayWithOpacity)
-        
         background.frame = CGRect(x: 0, y: 0, width: tableView.bounds.width, height: 75)
         
         if indexPath.row == options.count - 1 {
@@ -353,15 +354,17 @@ extension AddTrackerViewController: UICollectionViewDataSource {
         guard let section = Section(rawValue: indexPath.section) else {
             return UICollectionViewCell()
         }
+        
         switch section {
         case .emoji:
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: Identifiers.AddTrackerEmojiCollectionViewCell.cellReuseIdentifier, for: indexPath) as! AddTrackerEmojiCollectionViewCell
-            cell.configure(with: emojiSymbols[indexPath.item])
+            cell.configure(with: emojiSymbols[indexPath.item], isSelected: indexPath == selectedEmojiIndexPath)
+            cell.isSelected = indexPath == selectedEmojiIndexPath
             return cell
         case .color:
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: Identifiers.AddTrackerColorCollectionViewCell.cellReuseIdentifier, for: indexPath) as! AddTrackerColorCollectionViewCell
-            cell.configure(color: colors[indexPath.item])
-            cell.isSelected = collectionView.indexPathsForSelectedItems?.contains(indexPath) ?? false
+            cell.configure(color: colors[indexPath.item], isSelected: indexPath == selectedColorIndexPath)
+            cell.isSelected = indexPath == selectedColorIndexPath
             return cell
         }
     }
@@ -372,6 +375,7 @@ extension AddTrackerViewController: UICollectionViewDataSource {
               let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: Identifiers.AddTrackerSupplementaryView.headerReuseIdentifier, for: indexPath) as? AddTrackerSupplementaryView else {
             return UICollectionReusableView()
         }
+        
         switch section {
         case .emoji:
             header.configure(with: "Emoji")
@@ -405,25 +409,30 @@ extension AddTrackerViewController: UICollectionViewDelegateFlowLayout {
         
         switch section {
         case .emoji:
+            let previousIndexPath = selectedEmojiIndexPath
+            
+            selectedEmojiIndexPath = indexPath
             selectedEmoji = emojiSymbols[indexPath.item]
+            
+            var itemsToReload = [indexPath]
+            if let previousIndexPath {
+                itemsToReload.append(previousIndexPath)
+            }
+            
+            collectionView.reloadItems(at: itemsToReload)
+            
         case .color:
+            let previousIndexPath = selectedColorIndexPath
+            
+            selectedColorIndexPath = indexPath
             selectedColor = colors[indexPath.item]
-        }
-        updateCreateButtonState()
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
-        guard let section = Section(rawValue: indexPath.section) else { return }
-        
-        switch section {
-        case .emoji:
-            if selectedEmoji == emojiSymbols[indexPath.item] {
-                selectedEmoji = nil
+            
+            var itemsToReload = [indexPath]
+            if let previousIndexPath {
+                itemsToReload.append(previousIndexPath)
             }
-        case .color:
-            if selectedColor == colors[indexPath.item] {
-                selectedColor = nil
-            }
+            
+            collectionView.reloadItems(at: itemsToReload)
         }
         updateCreateButtonState()
     }

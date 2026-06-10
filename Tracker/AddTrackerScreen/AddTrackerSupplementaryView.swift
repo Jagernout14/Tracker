@@ -9,10 +9,13 @@ import UIKit
 
 final class AddTrackerSupplementaryView: UICollectionReusableView {
     
+    // MARK: - Public Properties
     static let identifier = Identifiers.AddTrackerSupplementaryView.headerReuseIdentifier
     
+    // MARK: - Private Properties
     lazy private var headerLabel = UILabel()
     
+    // MARK: - Initializers
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupHeader()
@@ -23,6 +26,7 @@ final class AddTrackerSupplementaryView: UICollectionReusableView {
         nil
     }
     
+    // MARK: - Public Methods
     func configure(with title: String) {
         headerLabel.text = title
     }

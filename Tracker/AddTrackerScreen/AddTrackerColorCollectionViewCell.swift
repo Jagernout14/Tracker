@@ -9,14 +9,13 @@ import UIKit
 
 final class AddTrackerColorCollectionViewCell: UICollectionViewCell {
     
+    // MARK: - Public Properties
     static let reuseIdentifier = Identifiers.AddTrackerColorCollectionViewCell.cellReuseIdentifier
+    
+    // MARK: - Private Properties
     private let colorView = UIView()
     
-    override var isSelected: Bool {
-        didSet {
-            updateCellUI()        }
-    }
-    
+    // MARK: - Initializers
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupColorView()
@@ -27,15 +26,33 @@ final class AddTrackerColorCollectionViewCell: UICollectionViewCell {
         nil
     }
     
-    func configure(color: UIColor) {
-        colorView.backgroundColor = color
+    // MARK: - Overrides Methods
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        colorView.layer.borderWidth = 0
+        colorView.layer.borderColor = nil
     }
     
+    // MARK: - Public Methods
+    func configure(color: UIColor, isSelected: Bool) {
+        colorView.backgroundColor = color
+        contentView.layer.cornerRadius = 12
+        
+        if isSelected {
+            contentView.layer.borderWidth = 3
+            contentView.layer.borderColor =
+            color.withAlphaComponent(0.3).cgColor
+        } else {
+            contentView.layer.borderWidth = 0
+            contentView.layer.borderColor = nil
+        }
+    }
+    
+    // MARK: - Private Methods
     private func updateCellUI() {
         if isSelected {
             colorView.layer.borderWidth = 3
             colorView.layer.borderColor = colorView.backgroundColor?.withAlphaComponent(0.3).cgColor
-            
         } else {
             colorView.layer.borderWidth = 0
             colorView.layer.borderColor = nil
