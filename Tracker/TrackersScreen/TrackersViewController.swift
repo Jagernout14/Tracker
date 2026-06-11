@@ -43,9 +43,19 @@ final class TrackersViewController: UIViewController {
         
         loadCategories()
         updatePlaceholder()
+        
+        setupMockCategory()
     }
     
     // MARK: - Private Methods
+    private func setupMockCategory() {
+        do {
+            try categoryStore.addCategory(name: "Дом")
+        } catch {
+            print("Ошибка создания категории:", error)
+        }
+    }
+    
     private func applyFiltering() {
         let calendarWeekday = Calendar.current.component(.weekday, from: currentDate)
         

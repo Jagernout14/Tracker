@@ -13,7 +13,7 @@ final class AddTrackerSupplementaryView: UICollectionReusableView {
     static let identifier = Identifiers.AddTrackerSupplementaryView.headerReuseIdentifier
     
     // MARK: - Private Properties
-    lazy private var headerLabel = UILabel()
+    private lazy var headerLabel = UILabel()
     
     // MARK: - Initializers
     override init(frame: CGRect) {

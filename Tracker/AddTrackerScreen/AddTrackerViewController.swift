@@ -22,32 +22,6 @@ final class AddTrackerViewController: UIViewController {
     }()
     
     private let options = ["Категория", "Расписание"]
-    private let emojiSymbols = [
-        "🙂", "😻", "🌺", "🐶", "❤️", "😱",
-        "😇", "😡", "🥶", "🤔", "🙌", "🍔",
-        "🥦", "🏓", "🥇", "🎸", "🏝", "😪"
-    ]
-    
-    private lazy var colors: [UIColor] = [
-        assetColor("CardBiege"),
-        assetColor("CardBiegeDust"),
-        assetColor("CardBlue"),
-        assetColor("CardBlueDust"),
-        assetColor("CardBlueLight"),
-        assetColor("CardGrape"),
-        assetColor("CardGrapeDark"),
-        assetColor("CardGrapeDust"),
-        assetColor("CardGrapeLight"),
-        assetColor("CardGreen"),
-        assetColor("CardGreenBright"),
-        assetColor("CardOrange"),
-        assetColor("CardOrangeBrick"),
-        assetColor("CardPink"),
-        assetColor("CardPinkLight"),
-        assetColor("CardPurple"),
-        assetColor("CardRed"),
-        assetColor("CardTransulent")
-    ]
     
     private var selectedSchedule: Set<WeekDays> = []
     private var selectedEmoji: String?
@@ -82,14 +56,6 @@ final class AddTrackerViewController: UIViewController {
         
         createButton.isEnabled = isValid
         createButton.backgroundColor = isValid ? UIColor(resource: .trackerBlack) : UIColor(resource: .trackerDarkGray)
-    }
-    
-    private func assetColor(_ name: String) -> UIColor {
-        guard let color = UIColor(named: name) else {
-            assertionFailure("Цвет в ассете по имени не нашелся")
-            return .black
-        }
-        return color
     }
     
     @objc private func textFieldDidChange() {
@@ -369,7 +335,7 @@ extension AddTrackerViewController: UICollectionViewDataSource {
         
         switch section {
         case .emoji:
-            return emojiSymbols.count
+            return MockData.emojiSymbols.count
         case .color:
             return 18
         }
@@ -383,12 +349,12 @@ extension AddTrackerViewController: UICollectionViewDataSource {
         switch section {
         case .emoji:
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: Identifiers.AddTrackerEmojiCollectionViewCell.cellReuseIdentifier, for: indexPath) as! AddTrackerEmojiCollectionViewCell
-            cell.configure(with: emojiSymbols[indexPath.item], isSelected: indexPath == selectedEmojiIndexPath)
+            cell.configure(with: MockData.emojiSymbols[indexPath.item], isSelected: indexPath == selectedEmojiIndexPath)
             cell.isSelected = indexPath == selectedEmojiIndexPath
             return cell
         case .color:
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: Identifiers.AddTrackerColorCollectionViewCell.cellReuseIdentifier, for: indexPath) as! AddTrackerColorCollectionViewCell
-            cell.configure(color: colors[indexPath.item], isSelected: indexPath == selectedColorIndexPath)
+            cell.configure(color: MockData.colors[indexPath.item], isSelected: indexPath == selectedColorIndexPath)
             cell.isSelected = indexPath == selectedColorIndexPath
             return cell
         }
@@ -437,7 +403,7 @@ extension AddTrackerViewController: UICollectionViewDelegateFlowLayout {
             let previousIndexPath = selectedEmojiIndexPath
             
             selectedEmojiIndexPath = indexPath
-            selectedEmoji = emojiSymbols[indexPath.item]
+            selectedEmoji = MockData.emojiSymbols[indexPath.item]
             
             var itemsToReload = [indexPath]
             if let previousIndexPath {
@@ -450,7 +416,7 @@ extension AddTrackerViewController: UICollectionViewDelegateFlowLayout {
             let previousIndexPath = selectedColorIndexPath
             
             selectedColorIndexPath = indexPath
-            selectedColor = colors[indexPath.item]
+            selectedColor = MockData.colors[indexPath.item]
             
             var itemsToReload = [indexPath]
             if let previousIndexPath {

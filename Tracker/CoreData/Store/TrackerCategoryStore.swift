@@ -17,6 +17,10 @@ final class TrackerCategoryStore: NSObject {
     // MARK: - Public Properties
     weak var delegate: TrackerCategoryStoreDelegate?
     
+    var sectionAmount: Int {
+        fetchedResultsController?.sections?.count ?? 0
+    }
+    
     // MARK: - Private Properties
     private let context: NSManagedObjectContext
     private var fetchedResultsController: NSFetchedResultsController<TrackerCategoryCoreData>?
@@ -58,17 +62,14 @@ final class TrackerCategoryStore: NSObject {
         return objects.compactMap(makeCategory)
     }
     
-    func numberOfSections() -> Int {
-        fetchedResultsController?.sections?.count ?? 0
-    }
-    
     func numberOfItems(in section: Int) -> Int {
         fetchedResultsController?.sections?[section].numberOfObjects ?? 0
     }
     
-    func category( at indexPath: IndexPath) -> TrackerCategoryCoreData {
+    func category( at indexPath: IndexPath) -> TrackerCategoryCoreData? {
         guard let object = fetchedResultsController?.object(at: indexPath) else {
-            fatalError("Обьектов по IndexPath нету")
+            assertionFailure("Обьектов по IndexPath нету")
+            return nil
         }
         return object
     }

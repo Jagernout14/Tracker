@@ -38,25 +38,14 @@ final class AddTrackerColorCollectionViewCell: UICollectionViewCell {
         colorView.backgroundColor = color
         contentView.layer.cornerRadius = 12
         
-        if isSelected {
-            contentView.layer.borderWidth = 3
-            contentView.layer.borderColor =
-            color.withAlphaComponent(0.3).cgColor
-        } else {
-            contentView.layer.borderWidth = 0
-            contentView.layer.borderColor = nil
-        }
+        contentView.layer.borderWidth = isSelected ? 3 : 0
+        contentView.layer.borderColor = isSelected ? color.withAlphaComponent(0.3).cgColor : nil
     }
     
     // MARK: - Private Methods
     private func updateCellUI() {
-        if isSelected {
-            colorView.layer.borderWidth = 3
-            colorView.layer.borderColor = colorView.backgroundColor?.withAlphaComponent(0.3).cgColor
-        } else {
-            colorView.layer.borderWidth = 0
-            colorView.layer.borderColor = nil
-        }
+        colorView.layer.borderWidth = isSelected ? 3 : 0
+        colorView.layer.borderColor = isSelected ? colorView.backgroundColor?.withAlphaComponent(0.3).cgColor : nil
     }
     
     //MARK: - Setup UI
