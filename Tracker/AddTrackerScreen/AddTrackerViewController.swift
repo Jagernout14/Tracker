@@ -169,7 +169,7 @@ final class AddTrackerViewController: UIViewController {
             collectionView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
             collectionView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
             collectionView.topAnchor.constraint(equalTo: tableView.bottomAnchor, constant: 24),
-            collectionView.heightAnchor.constraint(equalToConstant: 800),
+            collectionView.heightAnchor.constraint(equalToConstant: 400),
             collectionView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -24)
         ])
     }
