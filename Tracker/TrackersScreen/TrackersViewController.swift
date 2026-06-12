@@ -14,6 +14,7 @@ final class TrackersViewController: UIViewController {
     
     private let categoryStore = TrackerCategoryStore()
     private let trackerStore = TrackerStore()
+    private let recordStore = TrackerRecordStore()
     
     private var collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
@@ -41,7 +42,9 @@ final class TrackersViewController: UIViewController {
         
         categoryStore.delegate = self
         
+        loadCompletedTrackers()
         loadCategories()
+        
         updatePlaceholder()
         
         setupMockCategory()
@@ -95,10 +98,16 @@ final class TrackersViewController: UIViewController {
     
     private func toggleTracker(id: UUID, date: Date) {
         let record = TrackerRecord(trackerId: id, date: date)
-        if completedTrackers.contains(record) {
-            completedTrackers.remove(record)
-        } else {
-            completedTrackers.insert(record)
+        
+        do {
+            if completedTrackers.contains(record) {
+                try recordStore.deleteRecord(record)
+            } else {
+                try recordStore.addRecord(record)
+                completedTrackers.insert(record)
+            }
+        } catch {
+            assertionFailure("Ошибка изменения записи: \(error)")
         }
     }
     
@@ -115,6 +124,15 @@ final class TrackersViewController: UIViewController {
         applyFiltering()
         collectionView.reloadData()
         updatePlaceholder()
+    }
+    
+    private func loadCompletedTrackers() {
+        do {
+            let records = try recordStore.fetchRecords()
+            completedTrackers = Set(records)
+        } catch {
+            assertionFailure("Не получилось загрузить записи: \(error)")
+        }
     }
     
     @objc private func didTapAddTrackerButton() {

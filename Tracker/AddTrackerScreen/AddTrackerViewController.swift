@@ -52,7 +52,10 @@ final class AddTrackerViewController: UIViewController {
     // MARK: - Private Methods
     private func updateCreateButtonState() {
         let text = searchField.text?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
-        let isValid = !text.isEmpty
+        let isValid = !text.isEmpty &&
+        !selectedSchedule.isEmpty &&
+        selectedEmoji != nil &&
+        selectedColor != nil
         
         createButton.isEnabled = isValid
         createButton.backgroundColor = isValid ? UIColor(resource: .trackerBlack) : UIColor(resource: .trackerDarkGray)
@@ -348,12 +351,16 @@ extension AddTrackerViewController: UICollectionViewDataSource {
         
         switch section {
         case .emoji:
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: Identifiers.AddTrackerEmojiCollectionViewCell.cellReuseIdentifier, for: indexPath) as! AddTrackerEmojiCollectionViewCell
+            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: Identifiers.AddTrackerEmojiCollectionViewCell.cellReuseIdentifier, for: indexPath) as? AddTrackerEmojiCollectionViewCell else {
+                return UICollectionViewCell()
+            }
             cell.configure(with: MockData.emojiSymbols[indexPath.item], isSelected: indexPath == selectedEmojiIndexPath)
             cell.isSelected = indexPath == selectedEmojiIndexPath
             return cell
         case .color:
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: Identifiers.AddTrackerColorCollectionViewCell.cellReuseIdentifier, for: indexPath) as! AddTrackerColorCollectionViewCell
+            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: Identifiers.AddTrackerColorCollectionViewCell.cellReuseIdentifier, for: indexPath) as? AddTrackerColorCollectionViewCell else {
+                return UICollectionViewCell()
+            }
             cell.configure(color: MockData.colors[indexPath.item], isSelected: indexPath == selectedColorIndexPath)
             cell.isSelected = indexPath == selectedColorIndexPath
             return cell
