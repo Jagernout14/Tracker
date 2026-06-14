@@ -22,6 +22,7 @@ final class TrackersCollectionViewCell: UICollectionViewCell {
         setupCell()
     }
     
+    @available(*, unavailable)
     required init?(coder: NSCoder) {
         nil
     }

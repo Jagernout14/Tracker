@@ -11,6 +11,7 @@ final class TrackersSupplementaryView: UICollectionReusableView {
         setupHeader()
     }
     
+    @available(*, unavailable)
     required init?(coder: NSCoder) {
         nil
     }
