@@ -9,8 +9,14 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         
         window = UIWindow(windowScene: windowScene)
         
-        let tabBarController = MainTabBarController()
-        window?.rootViewController = tabBarController
+        let onboardingAlreadySeen = UserDefaults.standard.bool(forKey: "onboardingAlreadySeen")
+        
+        if onboardingAlreadySeen {
+            window?.rootViewController = MainTabBarController()
+        } else {
+            window?.rootViewController = OnboardingViewController()
+        }
+        
         window?.makeKeyAndVisible()
     }
 }
