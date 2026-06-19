@@ -56,6 +56,18 @@ final class CategoryListViewController: UIViewController {
         present(viewController, animated: true)
         
     }
+    
+    
+    
+    
+    
+    private func editCategory(named title: String) {
+        print("Редактировать:", title)
+    }
+    
+    private func deleteCategory(at index: Int) {
+        viewModel.deleteCategory(at: index)
+    }
 }
 
 //MARK: UI Setup
@@ -203,5 +215,22 @@ extension CategoryListViewController: UITableViewDelegate {
         onCategorySelected?(categoryName)
         
         dismiss(animated: true)
+    }
+    
+    func tableView(_ tableView: UITableView, contextMenuConfigurationForRowAt indexPath: IndexPath, point: CGPoint) -> UIContextMenuConfiguration? {
+        let categoryName = viewModel.categoryTitle(at: indexPath.row)
+        
+        return UIContextMenuConfiguration(identifier: nil, previewProvider: nil) { [weak self] _ in
+            
+            let editAction = UIAction(title: "Редактировать") { _ in
+                self?.editCategory(named: categoryName)
+            }
+            
+            let deleteAction = UIAction(title: "Удалить", attributes: .destructive) { _ in
+                self?.deleteCategory(at: indexPath.row)
+            }
+            
+            return UIMenu(children: [editAction, deleteAction])
+        }
     }
 }

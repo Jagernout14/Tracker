@@ -18,6 +18,7 @@ protocol CategoryListViewModelProtocol {
     func isSelected( at index: Int) -> Bool
     func categoryTitle(at index: Int) -> String
     func setSelectedCategory(_ title: String?)
+    func deleteCategory(at index: Int)
 }
 
 final class CategoryListViewModel: CategoryListViewModelProtocol {
@@ -63,6 +64,16 @@ final class CategoryListViewModel: CategoryListViewModelProtocol {
         selectedCategoryTitle = title
     }
     
+    func deleteCategory(at index: Int) {
+        let category = categories[index]
+        do {
+            try store.deleteCategory(named: category.title)
+        } catch {
+            print("Ошибка удаления категории:", error)
+        }
+    }
+    
+    // MARK: - Private Methods
     private func fetchCategories() {
         categories = store.fetchCategoriesFromFetchResultController()
         onCategoriesChanged?()
