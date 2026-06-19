@@ -71,7 +71,7 @@ final class OnboardingViewController: UIPageViewController {
     }
     
     private func finishOnboarding() {
-        UserDefaults.standard.set(true, forKey: "onboardingAlreadySeen")
+        UserDefaultsService.shared.isOnboardingAlreadySeen = true
         
         guard let scene = view.window?.windowScene,
               let sceneDelegate = scene.delegate as? SceneDelegate,

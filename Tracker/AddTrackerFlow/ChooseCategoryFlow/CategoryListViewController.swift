@@ -137,10 +137,12 @@ extension CategoryListViewController {
         emptyScreenImage.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(emptyScreenImage)
         
-        emptyScreenImage.widthAnchor.constraint(equalToConstant: 80).isActive = true
-        emptyScreenImage.heightAnchor.constraint(equalToConstant: 80).isActive = true
-        emptyScreenImage.centerYAnchor.constraint(equalTo: view.centerYAnchor).isActive = true
-        emptyScreenImage.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+        NSLayoutConstraint.activate([
+            emptyScreenImage.widthAnchor.constraint(equalToConstant: 80),
+            emptyScreenImage.heightAnchor.constraint(equalToConstant: 80),
+            emptyScreenImage.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+            emptyScreenImage.centerXAnchor.constraint(equalTo: view.centerXAnchor)
+        ])
     }
     
     private func setupEmptyScreenLabel() {
