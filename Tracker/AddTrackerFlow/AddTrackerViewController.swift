@@ -3,7 +3,7 @@ import UIKit
 final class AddTrackerViewController: UIViewController {
     
     // MARK: - Public Properties
-    var onCreateTracker: ((Tracker) -> Void)?
+    var onCreateTracker: ((Tracker, String) -> Void)?
     
     // MARK: - Private Properties
     private lazy var headerLabel = UILabel()
@@ -30,6 +30,7 @@ final class AddTrackerViewController: UIViewController {
     
     private var selectedEmojiIndexPath: IndexPath?
     private var selectedColorIndexPath: IndexPath?
+    private var selectedCategory: String?
     
     private enum Section: Int, CaseIterable {
         case emoji
@@ -53,6 +54,7 @@ final class AddTrackerViewController: UIViewController {
     private func updateCreateButtonState() {
         let text = searchField.text?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
         let isValid = !text.isEmpty &&
+        selectedCategory != nil &&
         !selectedSchedule.isEmpty &&
         selectedEmoji != nil &&
         selectedColor != nil
@@ -74,7 +76,9 @@ final class AddTrackerViewController: UIViewController {
         
         let tracker = Tracker(id: UUID(), name: text, color: selectedColor ?? .systemRed, icon: selectedEmoji ?? "🛑", schedule: selectedSchedule.sorted { $0.rawValue < $1.rawValue })
         
-        onCreateTracker?(tracker)
+        guard let categoryName = selectedCategory else { return }
+        
+        onCreateTracker?(tracker, categoryName)
         dismiss(animated: true)
     }
     
@@ -257,6 +261,11 @@ extension AddTrackerViewController: UITableViewDataSource {
         let cell = UITableViewCell(style: .subtitle, reuseIdentifier: nil)
         
         cell.textLabel?.text = options[indexPath.row]
+        if indexPath.row == 0 {
+            cell.detailTextLabel?.text = selectedCategory
+            cell.detailTextLabel?.textColor = UIColor(resource: .trackerDarkGray)
+        }
+        
         if indexPath.row == 1 {
             cell.detailTextLabel?.text = scheduleText
             cell.detailTextLabel?.textColor = UIColor(resource: .trackerDarkGray)
@@ -293,8 +302,18 @@ extension AddTrackerViewController: UITableViewDelegate {
         
         switch indexPath.row {
         case 0:
-            //TODO: Логика выбора категории
-            print("А здесь пока ничего нет")
+            let viewModel = CategoryListViewModel()
+            viewModel.setSelectedCategory(selectedCategory)
+            let viewController = CategoryListViewController(viewModel: viewModel)
+            
+            viewController.onCategorySelected = { [weak self] categoryName in
+                self?.selectedCategory = categoryName
+                self?.tableView.reloadRows(at: [IndexPath(row: 0, section: 0)], with: .none)
+                self?.updateCreateButtonState()
+            }
+            
+            present(viewController, animated: true)
+            
         case 1:
             let viewController = ScheduleViewController()
             viewController.modalPresentationStyle = .pageSheet

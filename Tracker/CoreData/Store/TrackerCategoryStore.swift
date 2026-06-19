@@ -74,6 +74,27 @@ final class TrackerCategoryStore: NSObject {
         return object
     }
     
+    func deleteCategory(named title: String) throws {
+        let request = TrackerCategoryCoreData.fetchRequest()
+        
+        request.predicate = NSPredicate(format: "title == %@", title)
+        
+        guard let category = try context.fetch(request).first else { return }
+        context.delete(category)
+        
+        try context.save()
+    }
+    
+    func updateCategory(oldTitle: String, newTitle: String) throws {
+        let request = TrackerCategoryCoreData.fetchRequest()
+        request.predicate = NSPredicate(format: "title == %@", oldTitle)
+        
+        guard let category = try context.fetch(request).first else { return }
+        category.title = newTitle
+        
+        try context.save()
+    }
+    
     // MARK: - Private Methods
     private func makeCategory(from coreData: TrackerCategoryCoreData) -> TrackerCategory? {
         guard let title = coreData.title else {
