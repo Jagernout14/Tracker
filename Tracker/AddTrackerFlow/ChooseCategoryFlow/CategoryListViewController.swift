@@ -57,12 +57,10 @@ final class CategoryListViewController: UIViewController {
         
     }
     
-    
-    
-    
-    
     private func editCategory(named title: String) {
-        print("Редактировать:", title)
+        let viewController = AddNewCategoryViewController()
+        viewController.categoryToEdit = title
+        present(viewController, animated: true)
     }
     
     private func deleteCategory(at index: Int) {

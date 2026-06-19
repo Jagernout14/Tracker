@@ -9,6 +9,12 @@ import UIKit
 
 final class AddNewCategoryViewController: UIViewController {
     
+    // MARK: - Public Properties
+    var categoryToEdit: String?
+    
+    var onCategoryCreated: ((String) -> Void)?
+    var onCategoryEdit: ((String, String) -> Void)?
+    
     // MARK: - Private Properties
     private let headerLabel = UILabel()
     private let textField = UITextField()
@@ -22,6 +28,7 @@ final class AddNewCategoryViewController: UIViewController {
         
         setupUI()
         updateDoneButtonState()
+        configureScreenState()
     }
     
     // MARK: - Private Methods
@@ -30,6 +37,18 @@ final class AddNewCategoryViewController: UIViewController {
         let isEnabled = !text.isEmpty
         doneButton.isEnabled = isEnabled
         doneButton.backgroundColor = isEnabled ? UIColor(resource: .trackerBlack) : UIColor(resource: .trackerDarkGray)
+    }
+    
+    private func configureScreenState() {
+        if let categoryToEdit {
+            headerLabel.text = "Редактирование категории"
+            textField.text = categoryToEdit
+            doneButton.setTitle("Готово", for: .normal)
+        } else {
+            headerLabel.text = "Новая категория"
+            textField.text = ""
+            doneButton.setTitle("Создать", for: .normal)
+        }
     }
     
     @objc private func textDidChange() {
@@ -42,10 +61,15 @@ final class AddNewCategoryViewController: UIViewController {
         else { return }
         
         do {
-            try categoryStore.addCategory(name: title)
+            if let oldTitle = categoryToEdit {
+                try categoryStore.updateCategory(oldTitle: oldTitle, newTitle: title)
+            } else {
+                try categoryStore.addCategory(name: title)
+            }
             dismiss(animated: true)
+            
         } catch {
-            print("Ошибка сохранения категории: \(error)")
+            print("Ошибка сохранения категории:", error)
         }
     }
 }

@@ -85,6 +85,16 @@ final class TrackerCategoryStore: NSObject {
         try context.save()
     }
     
+    func updateCategory(oldTitle: String, newTitle: String) throws {
+        let request = TrackerCategoryCoreData.fetchRequest()
+        request.predicate = NSPredicate(format: "title == %@", oldTitle)
+        
+        guard let category = try context.fetch(request).first else { return }
+        category.title = newTitle
+        
+        try context.save()
+    }
+    
     // MARK: - Private Methods
     private func makeCategory(from coreData: TrackerCategoryCoreData) -> TrackerCategory? {
         guard let title = coreData.title else {
