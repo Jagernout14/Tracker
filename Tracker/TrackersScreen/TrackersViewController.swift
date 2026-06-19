@@ -47,18 +47,9 @@ final class TrackersViewController: UIViewController {
         
         updatePlaceholder()
         
-        setupMockCategory()
     }
     
     // MARK: - Private Methods
-    private func setupMockCategory() {
-        do {
-            try categoryStore.addCategory(name: "Дом")
-        } catch {
-            print("Ошибка создания категории:", error)
-        }
-    }
-    
     private func applyFiltering() {
         let calendarWeekday = Calendar.current.component(.weekday, from: currentDate)
         
@@ -111,14 +102,6 @@ final class TrackersViewController: UIViewController {
         }
     }
     
-    private func updatePlaceholder() {
-        let isEmpty = visibleCategories.isEmpty
-        
-        emptyScreenImage.isHidden = !isEmpty
-        emptyScreenLabel.isHidden = !isEmpty
-        collectionView.isHidden = isEmpty
-    }
-    
     private func loadCategories() {
         visibleCategories = categoryStore.fetchCategoriesFromFetchResultController()
         applyFiltering()
@@ -139,22 +122,21 @@ final class TrackersViewController: UIViewController {
         let viewController = AddTrackerViewController()
         viewController.modalPresentationStyle = .pageSheet
         
-        viewController.onCreateTracker = { [weak self] tracker in
+        viewController.onCreateTracker = { [weak self] tracker, categoryName in
             guard let self else { return }
-            
-            guard let category = self.categoryStore.category(named: "Дом") else {
+
+            guard let category = self.categoryStore.category(named: categoryName) else {
                 print("Категория не найдена")
                 return
             }
-            
+
             do {
                 try self.trackerStore.addTracker(tracker, category: category)
-                
+
                 self.loadCategories()
-                self.applyFiltering()
                 self.collectionView.reloadData()
                 self.updatePlaceholder()
-                
+
             } catch {
                 print("Ошибка сохранения трекера:", error)
             }
@@ -244,11 +226,16 @@ extension TrackersViewController {
         emptyScreenLabel.font = UIFont.systemFont(ofSize: 12, weight: .medium)
         emptyScreenLabel.textColor = UIColor(resource: .trackerBlack)
         emptyScreenLabel.text = "Что будем отслеживать?"
+        emptyScreenLabel.textAlignment = .center
+        emptyScreenLabel.numberOfLines = 0
         emptyScreenLabel.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(emptyScreenLabel)
         
-        emptyScreenLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
-        emptyScreenLabel.topAnchor.constraint(equalTo: emptyScreenImage.bottomAnchor, constant: 8).isActive = true
+        NSLayoutConstraint.activate([
+            emptyScreenLabel.topAnchor.constraint(equalTo: emptyScreenImage.bottomAnchor, constant: 8),
+            emptyScreenLabel.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 16),
+            emptyScreenLabel.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -16)
+        ])
     }
     
     private func setupFilterButton() {
@@ -279,6 +266,14 @@ extension TrackersViewController {
     private func setupPlaceholder() {
         setupEmptyScreenImage()
         setupEmptyScreenLabel()
+    }
+    
+    private func updatePlaceholder() {
+        let isEmpty = visibleCategories.isEmpty
+        
+        emptyScreenImage.isHidden = !isEmpty
+        emptyScreenLabel.isHidden = !isEmpty
+        collectionView.isHidden = isEmpty
     }
 }
 
@@ -364,6 +359,7 @@ extension TrackersViewController: UICollectionViewDelegateFlowLayout {
     }
 }
 
+//MARK: - TrackerCategoryStoreDelegate
 extension TrackersViewController: TrackerCategoryStoreDelegate {
     func storeDidUpdate() {
         loadCategories()
