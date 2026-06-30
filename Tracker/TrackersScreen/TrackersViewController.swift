@@ -22,6 +22,8 @@ final class TrackersViewController: UIViewController {
         return collectionView
     }()
     
+    private var searchText = ""
+    
     // MARK: - Initializers
     init() {
         super.init(nibName: nil, bundle: nil)
@@ -52,22 +54,28 @@ final class TrackersViewController: UIViewController {
     // MARK: - Private Methods
     private func applyFiltering() {
         let calendarWeekday = Calendar.current.component(.weekday, from: currentDate)
-        
-        guard let weekDay = WeekDays.from(calendarWeekday: calendarWeekday) else {
-            return
-        }
-        
+
+        guard let weekDay = WeekDays.from(calendarWeekday: calendarWeekday) else { return }
+
         let allCategories = categoryStore.fetchCategoriesFromFetchResultController()
-        
         visibleCategories = allCategories.compactMap { category in
-            let filtered = category.trackers.filter {
-                $0.schedule.contains(weekDay)
+            let filteredTrackers = category.trackers.filter { tracker in
+                let matchesWeekday = tracker.schedule.contains(weekDay)
+
+                let matchesSearch = searchText.isEmpty ||
+                    tracker.name.localizedCaseInsensitiveContains(searchText)
+
+                return matchesWeekday && matchesSearch
             }
-            
-            guard !filtered.isEmpty else { return nil }
-            
-            return TrackerCategory(title: category.title, trackers: filtered)
+
+            guard !filteredTrackers.isEmpty else {
+                return nil
+            }
+
+            return TrackerCategory(title: category.title, trackers: filteredTrackers)
         }
+        collectionView.reloadData()
+        updatePlaceholder()
     }
     
     private func completeTracker(id: UUID, date: Date) -> Bool {
@@ -93,8 +101,10 @@ final class TrackersViewController: UIViewController {
         do {
             if completedTrackers.contains(record) {
                 try recordStore.deleteRecord(record)
+                completedTrackers.remove(record)
             } else {
                 try recordStore.addRecord(record)
+                completedTrackers.insert(record)
                 completedTrackers.insert(record)
             }
         } catch {
@@ -103,10 +113,7 @@ final class TrackersViewController: UIViewController {
     }
     
     private func loadCategories() {
-        visibleCategories = categoryStore.fetchCategoriesFromFetchResultController()
         applyFiltering()
-        collectionView.reloadData()
-        updatePlaceholder()
     }
     
     private func loadCompletedTrackers() {
@@ -163,14 +170,15 @@ extension TrackersViewController {
     private func setupSearchController() {
         let searchController = UISearchController(searchResultsController: nil)
         searchController.obscuresBackgroundDuringPresentation = false
-        searchController.searchBar.placeholder = "Поиск"
+        searchController.searchBar.placeholder = NSLocalizedString("Search", comment: "")
         searchController.searchBar.searchBarStyle = .minimal
+        searchController.searchResultsUpdater = self
         navigationItem.searchController = searchController
         navigationItem.hidesSearchBarWhenScrolling = false
     }
     
     private func setupNavigationBar() {
-        title = "Трекеры"
+        title = NSLocalizedString("Trackers", comment: "")
         
         let addTrackerButton = UIBarButtonItem(image: UIImage(resource: .addTrackerIcon), style: .plain, target: self, action: #selector(didTapAddTrackerButton))
         addTrackerButton.tintColor = UIColor(resource: .trackerBlack)
@@ -225,7 +233,7 @@ extension TrackersViewController {
     private func setupEmptyScreenLabel() {
         emptyScreenLabel.font = UIFont.systemFont(ofSize: 12, weight: .medium)
         emptyScreenLabel.textColor = UIColor(resource: .trackerBlack)
-        emptyScreenLabel.text = "Что будем отслеживать?"
+        emptyScreenLabel.text = NSLocalizedString("What shall we track?", comment: "")
         emptyScreenLabel.textAlignment = .center
         emptyScreenLabel.numberOfLines = 0
         emptyScreenLabel.translatesAutoresizingMaskIntoConstraints = false
@@ -239,7 +247,7 @@ extension TrackersViewController {
     }
     
     private func setupFilterButton() {
-        filtersButton.setTitle("Фильтры", for: .normal)
+        filtersButton.setTitle(NSLocalizedString("Filters", comment: ""), for: .normal)
         filtersButton.setTitleColor(UIColor(resource: .trackerWhite), for: .normal)
         filtersButton.titleLabel?.font = .systemFont(ofSize: 17, weight: .regular)
         filtersButton.backgroundColor = UIColor(resource: .trackerBlue)
@@ -363,5 +371,12 @@ extension TrackersViewController: UICollectionViewDelegateFlowLayout {
 extension TrackersViewController: TrackerCategoryStoreDelegate {
     func storeDidUpdate() {
         loadCategories()
+    }
+}
+
+extension TrackersViewController: UISearchResultsUpdating {
+    func updateSearchResults(for searchController: UISearchController) {
+        searchText = searchController.searchBar.text ?? ""
+        applyFiltering()
     }
 }

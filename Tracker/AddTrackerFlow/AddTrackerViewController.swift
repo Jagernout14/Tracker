@@ -21,7 +21,10 @@ final class AddTrackerViewController: UIViewController {
         return collectionView
     }()
     
-    private let options = ["Категория", "Расписание"]
+    private let options = [
+        NSLocalizedString("Category", comment: ""),
+        NSLocalizedString("Schedule", comment: "")
+]
     
     private var selectedSchedule: Set<WeekDays> = []
     private var selectedEmoji: String?
@@ -106,7 +109,7 @@ final class AddTrackerViewController: UIViewController {
     }
     
     private func setupHeader() {
-        headerLabel.text = "Новая привычка"
+        headerLabel.text = NSLocalizedString("New habit", comment: "")
         headerLabel.font = .systemFont(ofSize: 16, weight: .medium)
         headerLabel.textColor = .trackerBlack
         headerLabel.textAlignment = .center
@@ -122,7 +125,7 @@ final class AddTrackerViewController: UIViewController {
     }
     
     private func setupSearchField() {
-        searchField.placeholder = "Введите название трекера"
+        searchField.placeholder = NSLocalizedString("Enter tracker name", comment: "")
         searchField.backgroundColor = UIColor(resource: .trackerGrayWithOpacity)
         searchField.layer.cornerRadius = 16
         searchField.leftView = UIView(frame: CGRect(x: 0, y: 0, width: 16, height: 0))
@@ -182,7 +185,7 @@ final class AddTrackerViewController: UIViewController {
     }
     
     private func setupCancelButton() {
-        cancelButton.setTitle("Отменить", for: .normal)
+        cancelButton.setTitle(NSLocalizedString("Cancel", comment: ""), for: .normal)
         cancelButton.setTitleColor(UIColor(resource: .trackerRed), for: .normal)
         cancelButton.titleLabel?.font = .systemFont(ofSize: 16, weight: .medium)
         cancelButton.layer.borderWidth = 1
@@ -202,7 +205,7 @@ final class AddTrackerViewController: UIViewController {
     }
     
     private func setupCreateButton() {
-        createButton.setTitle("Создать", for: .normal)
+        createButton.setTitle(NSLocalizedString("Create", comment: ""), for: .normal)
         createButton.setTitleColor(UIColor(resource: .trackerWhite), for: .normal)
         createButton.titleLabel?.font = .systemFont(ofSize: 16, weight: .medium)
         createButton.isEnabled = false
@@ -397,7 +400,7 @@ extension AddTrackerViewController: UICollectionViewDataSource {
         case .emoji:
             header.configure(with: "Emoji")
         case .color:
-            header.configure(with: "Цвет")
+            header.configure(with: NSLocalizedString("Color", comment: ""))
         }
         return header
     }
