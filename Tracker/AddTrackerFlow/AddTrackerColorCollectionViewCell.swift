@@ -13,7 +13,7 @@ final class AddTrackerColorCollectionViewCell: UICollectionViewCell {
     static let reuseIdentifier = Identifiers.AddTrackerColorCollectionViewCell.cellReuseIdentifier
     
     // MARK: - Private Properties
-    private let colorView = UIView()
+    private lazy var colorView = UIView()
     
     // MARK: - Initializers
     override init(frame: CGRect) {

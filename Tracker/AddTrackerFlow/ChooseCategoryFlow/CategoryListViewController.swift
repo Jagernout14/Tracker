@@ -13,12 +13,12 @@ final class CategoryListViewController: UIViewController {
     var onCategorySelected: ((String) -> Void)?
     
     // MARK: - Private Properties
-    private let headerLabel = UILabel()
+    private lazy var headerLabel = UILabel()
+    private lazy var emptyScreenImage = UIImageView()
+    private lazy var emptyScreenLabel = UILabel()
+    
     private let tableView = UITableView(frame: .zero, style: .plain)
     private let addCategoryButton = UIButton()
-    
-    private let emptyScreenLabel = UILabel()
-    private let emptyScreenImage = UIImageView()
     
     private var viewModel: CategoryListViewModelProtocol
     

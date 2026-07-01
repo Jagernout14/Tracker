@@ -3,8 +3,8 @@ import UIKit
 final class ScheduleViewController: UIViewController {
     
     // MARK: - Private Properties
-    lazy private var headerLabel = UILabel()
-    lazy private var doneButton = UIButton()
+    private lazy var headerLabel = UILabel()
+    private lazy var doneButton = UIButton()
     
     private let tableView = UITableView(frame: .zero, style: .plain)
     

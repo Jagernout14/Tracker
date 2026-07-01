@@ -16,9 +16,9 @@ final class AddNewCategoryViewController: UIViewController {
     var onCategoryEdit: ((String, String) -> Void)?
     
     // MARK: - Private Properties
-    lazy private var headerLabel = UILabel()
-    lazy private var textField = UITextField()
-    lazy private var doneButton = UIButton()
+    private lazy var headerLabel = UILabel()
+    private lazy var textField = UITextField()
+    private lazy var doneButton = UIButton()
     
     private let categoryStore = TrackerCategoryStore()
     
