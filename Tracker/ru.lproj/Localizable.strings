@@ -1,4 +1,4 @@
-/* 
+/*
   Localizable.strings
   Tracker
 
@@ -33,4 +33,7 @@
 "Statistics" = "Статистика";
 "Edit habit" = "Редактирование привычки";
 "Are you sure you want to delete tracker?" = "Уверены что хотите удалить трекер?";
-
+"All Trackers" = "Все трекеры";
+"Trackers for Today" = "Трекеры на сегодня";
+"Completed" = "Завершенные";
+"Uncompleted" = "Незавершённые";

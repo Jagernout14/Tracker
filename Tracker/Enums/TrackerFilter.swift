@@ -5,9 +5,23 @@
 //  Created by Роман Пичугин on 01.07.2026.
 //
 
-enum TrackerFilter: Int {
+import Foundation
+enum TrackerFilter: String, CaseIterable {
     case all
     case today
     case completed
-    case uncompleted
+    case notCompleted
+    
+    var title: String {
+        switch self {
+        case .all:
+            return NSLocalizedString("All Trackers", comment: "")
+        case .today:
+            return NSLocalizedString("Trackers for Today", comment: "")
+        case .completed:
+            return NSLocalizedString("Completed", comment: "")
+        case .notCompleted:
+            return NSLocalizedString("Uncompleted", comment: "")
+        }
+    }
 }

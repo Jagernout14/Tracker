@@ -23,6 +23,7 @@ final class TrackersViewController: UIViewController {
     }()
     
     private var searchText = ""
+    private var selectedFilter = UserDefaultsService.shared.selectedFilter
     
     // MARK: - Initializers
     init() {
@@ -218,7 +219,19 @@ final class TrackersViewController: UIViewController {
     }
     
     @objc private func didTapFiltersButton() {
+        let controller = FiltersViewController()
         
+        controller.selectedFilter = selectedFilter
+        controller.modalPresentationStyle = .pageSheet
+        controller.onFilterSelected = { [weak self] filter in
+            guard let self else { return }
+            
+            self.selectedFilter = filter
+            UserDefaultsService.shared.selectedFilter = filter
+            self.applyFiltering()
+        }
+        
+        present(controller, animated: true)
     }
 }
 
