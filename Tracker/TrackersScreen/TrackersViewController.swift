@@ -24,6 +24,8 @@ final class TrackersViewController: UIViewController {
     
     private var searchText = ""
     private var selectedFilter = UserDefaultsService.shared.selectedFilter
+    private var isFilteringResultEmpty: Bool = false
+    private var hasTrackersForSelectedDate = false
     
     // MARK: - Initializers
     init() {
@@ -54,28 +56,40 @@ final class TrackersViewController: UIViewController {
     
     // MARK: - Private Methods
     private func applyFiltering() {
-        let calendarWeekday = Calendar.current.component(.weekday, from: currentDate)
+        let effectiveDate: Date = {
+            selectedFilter == .today ? Date() : currentDate
+        }()
+        
+        let calendarWeekday = Calendar.current.component(.weekday, from: effectiveDate)
+        
         guard let weekDay = WeekDays.from(calendarWeekday: calendarWeekday) else { return }
         
         let allCategories = categoryStore.fetchCategoriesFromFetchResultController()
+        
+        hasTrackersForSelectedDate = allCategories.contains { category in
+            category.trackers.contains { tracker in
+                tracker.schedule.contains(weekDay)
+            }
+        }
+        
         visibleCategories = allCategories.compactMap { category in
+            
             let filteredTrackers = category.trackers.filter { tracker in
                 let matchesWeekday = tracker.schedule.contains(weekDay)
+                let matchesSearch = searchText.isEmpty || tracker.name.localizedCaseInsensitiveContains(searchText)
+                let matchesFilter = matchesSelectedFilter(for: tracker)
                 
-                let matchesSearch = searchText.isEmpty ||
-                tracker.name.localizedCaseInsensitiveContains(searchText)
-                
-                return matchesWeekday && matchesSearch
+                return matchesWeekday &&
+                matchesSearch &&
+                matchesFilter
             }
             
-            guard !filteredTrackers.isEmpty else {
-                return nil
-            }
+            guard !filteredTrackers.isEmpty else { return nil }
             
             return TrackerCategory(title: category.title, trackers: filteredTrackers)
         }
-        collectionView.reloadData()
         updatePlaceholder()
+        collectionView.reloadData()
     }
     
     private func completeTracker(id: UUID, date: Date) -> Bool {
@@ -86,6 +100,20 @@ final class TrackersViewController: UIViewController {
     private func isCompleted(trackerId: UUID, date: Date) -> Bool {
         completedTrackers.contains {
             $0.trackerId == trackerId && Calendar.current.isDate($0.date, inSameDayAs: date)
+        }
+    }
+    
+    private func matchesSelectedFilter(for tracker: Tracker) -> Bool {
+        switch selectedFilter {
+            
+        case .all:
+            return true
+        case .today:
+            return true
+        case .completed:
+            return isCompleted(trackerId: tracker.id, date: currentDate)
+        case .notCompleted:
+            return !isCompleted(trackerId: tracker.id, date: currentDate)
         }
     }
     
@@ -104,7 +132,6 @@ final class TrackersViewController: UIViewController {
                 completedTrackers.remove(record)
             } else {
                 try recordStore.addRecord(record)
-                completedTrackers.insert(record)
                 completedTrackers.insert(record)
             }
         } catch {
@@ -228,12 +255,20 @@ final class TrackersViewController: UIViewController {
             
             self.selectedFilter = filter
             UserDefaultsService.shared.selectedFilter = filter
+            
+            if filter == .today {
+                self.currentDate = Date()
+                
+                if let datePicker = self.navigationItem.rightBarButtonItem?.customView as? UIDatePicker {
+                    datePicker.setDate(Date(), animated: true)
+                }
+            }
             self.applyFiltering()
         }
-        
         present(controller, animated: true)
     }
 }
+
 
 //MARK: - Setup UI
 extension TrackersViewController {
@@ -359,7 +394,19 @@ extension TrackersViewController {
         emptyScreenImage.isHidden = !isEmpty
         emptyScreenLabel.isHidden = !isEmpty
         collectionView.isHidden = isEmpty
-        filtersButton.isHidden = isEmpty
+        
+        if !isEmpty {
+            filtersButton.isHidden = false
+            return
+        }
+        
+        if hasTrackersForSelectedDate {
+            emptyScreenLabel.text = NSLocalizedString("Nothing found", comment: "")
+            filtersButton.isHidden = false
+        } else {
+            emptyScreenLabel.text = NSLocalizedString("What shall we track?", comment: "")
+            filtersButton.isHidden = true
+        }
     }
 }
 

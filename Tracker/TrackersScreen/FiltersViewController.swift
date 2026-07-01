@@ -87,12 +87,17 @@ extension FiltersViewController: UITableViewDataSource {
         cell.textLabel?.font = .systemFont(ofSize: 17)
         cell.selectionStyle = .none
         
-        if filter == .completed || filter == .notCompleted {
-            cell.accessoryType = filter == selectedFilter ? .checkmark : .none
-            cell.tintColor = UIColor(resource: .trackerBlue)
-        } else {
-            cell.accessoryType = .none
-        }
+        let shouldShowCheckmark: Bool = {
+            switch filter {
+            case .all, .today:
+                return false
+            case .completed, .notCompleted:
+                return filter == selectedFilter
+            }
+        }()
+        
+        cell.accessoryType = shouldShowCheckmark ? .checkmark : .none
+        cell.tintColor = UIColor(resource: .trackerBlue)
         
         let background = UIView()
         background.backgroundColor = UIColor(resource: .trackerGrayWithOpacity)
