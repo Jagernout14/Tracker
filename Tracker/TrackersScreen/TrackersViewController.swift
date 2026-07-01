@@ -54,6 +54,16 @@ final class TrackersViewController: UIViewController {
         updatePlaceholder()
     }
     
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        AnalyticsService.shared.report(event: "open", screen: "TrackersViewController")
+    }
+    
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        AnalyticsService.shared.report(event: "close", screen: "TrackersViewController")
+    }
+    
     // MARK: - Private Methods
     private func applyFiltering() {
         let effectiveDate: Date = {
@@ -216,6 +226,8 @@ final class TrackersViewController: UIViewController {
     }
     
     @objc private func didTapAddTrackerButton() {
+        AnalyticsService.shared.report(event: "click", screen: "TrackersViewController", item: "addTrackerButton")
+        
         let viewController = AddTrackerViewController()
         viewController.modalPresentationStyle = .pageSheet
         
@@ -246,6 +258,8 @@ final class TrackersViewController: UIViewController {
     }
     
     @objc private func didTapFiltersButton() {
+        AnalyticsService.shared.report(event: "click", screen: "TrackersViewController", item: "filtersButton")
+        
         let controller = FiltersViewController()
         
         controller.selectedFilter = selectedFilter
@@ -437,6 +451,8 @@ extension TrackersViewController: UICollectionViewDataSource {
                   let indexPath = self.collectionView.indexPath(for: cell)
             else { return }
             
+            AnalyticsService.shared.report(event: "click", screen: "TrackersViewController", item: "trackerCard")
+            
             let calendar = Calendar.current
             if self.currentDate > Date() && !calendar.isDate(self.currentDate, inSameDayAs: Date()) {
                 return
@@ -501,6 +517,9 @@ extension TrackersViewController: UICollectionViewDelegate {
                 title: NSLocalizedString("Edit", comment: ""),
                 image: UIImage(systemName: "pencil")
             ) { [weak self] _ in
+                
+                AnalyticsService.shared.report(event: "click", screen: "TrackersViewController", item: "editTracker")
+                
                 self?.editTracker(tracker)
             }
             
@@ -509,6 +528,9 @@ extension TrackersViewController: UICollectionViewDelegate {
                 image: UIImage(systemName: "trash"),
                 attributes: .destructive
             ) { [weak self] _ in
+                
+                AnalyticsService.shared.report(event: "click", screen: "TrackersViewController", item: "deleteTracker")
+
                 self?.deleteTracker(tracker)
             }
             

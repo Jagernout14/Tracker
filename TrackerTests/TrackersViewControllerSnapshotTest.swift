@@ -11,10 +11,20 @@ import SnapshotTesting
 
 final class TrackersViewControllerSnapshotTests: XCTestCase {
 
-    func testTrackersViewController() {
+    func testTrackersViewControllerLight() {
         let vc = TrackersViewController()
 
         vc.overrideUserInterfaceStyle = .light
+        vc.loadViewIfNeeded()
+        vc.view.frame = UIScreen.main.bounds
+
+        assertSnapshot(of: vc, as: .image(on: .iPhone13))
+    }
+    
+    func testTrackersViewControllerDark() {
+        let vc = TrackersViewController()
+
+        vc.overrideUserInterfaceStyle = .dark
         vc.loadViewIfNeeded()
         vc.view.frame = UIScreen.main.bounds
 
