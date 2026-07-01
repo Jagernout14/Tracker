@@ -42,13 +42,13 @@ final class TrackersViewController: UIViewController {
         setupCollectionView()
         setupPlaceholder()
         
+        view.bringSubviewToFront(filtersButton)
         categoryStore.delegate = self
         
         loadCompletedTrackers()
         loadCategories()
         
         updatePlaceholder()
-        
     }
     
     // MARK: - Private Methods
@@ -273,6 +273,11 @@ extension TrackersViewController {
         
         collectionView.dataSource = self
         collectionView.delegate = self
+        
+        collectionView.contentInset.bottom = 82
+        collectionView.scrollIndicatorInsets.bottom = 82
+        collectionView.alwaysBounceVertical = true
+        
         collectionView.register(TrackersCollectionViewCell.self, forCellWithReuseIdentifier: Identifiers.TrackersCollectionViewCell.cellReuseIdentifier)
         collectionView.register(TrackersSupplementaryView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: Identifiers.TrackersSupplementaryView.headerReuseIdentifier)
     }
@@ -327,6 +332,7 @@ extension TrackersViewController {
     private func setupUI() {
         setupNavigationBar()
         setupNavigationBarAppearance()
+        setupFilterButton()
     }
     
     private func setupPlaceholder() {
@@ -340,6 +346,7 @@ extension TrackersViewController {
         emptyScreenImage.isHidden = !isEmpty
         emptyScreenLabel.isHidden = !isEmpty
         collectionView.isHidden = isEmpty
+        filtersButton.isHidden = isEmpty
     }
 }
 
