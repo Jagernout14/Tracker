@@ -11,6 +11,7 @@
 "Edit category" = "Редактирование категории";
 "Done" = "Готово";
 "Cancel" = "Отменить";
+"Save" = "Сохранить";
 "New category" = "Новая категория";
 "Create" = "Создать";
 "Enter category name" = "Введите название категории";
@@ -30,3 +31,6 @@
 "What shall we track?" = "Что будем отслеживать?";
 "Filters" = "Фильтры";
 "Statistics" = "Статистика";
+"Edit habit" = "Редактирование привычки";
+"Are you sure you want to delete tracker?" = "Уверены что хотите удалить трекер?";
+

@@ -53,6 +53,18 @@ final class TrackerStore {
         try CoreDataStack.shared.saveContext()
     }
     
+    func updateTracker(_ tracker: Tracker, category: TrackerCategoryCoreData) throws {
+        guard let object = try fetchTrackerCoreData(by: tracker.id) else { return }
+        
+        object.name = tracker.name
+        object.icon = tracker.icon
+        object.color = tracker.color
+        object.schedule = tracker.schedule as NSArray
+        object.category = category
+        
+        try CoreDataStack.shared.saveContext()
+    }
+    
     // MARK: - Private Methods
     private func makeTracker(from coreData: TrackerCoreData) -> Tracker? {
         guard
