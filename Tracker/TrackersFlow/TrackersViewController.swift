@@ -40,6 +40,7 @@ final class TrackersViewController: UIViewController {
     // MARK: - Overrides Methods
     override func viewDidLoad() {
         super.viewDidLoad()
+        view.backgroundColor = UIColor(resource: .trackerWhite)
         
         setupUI()
         setupCollectionView()
@@ -321,11 +322,18 @@ extension TrackersViewController {
         navigationController?.navigationBar.prefersLargeTitles = true
         
         let appearance = UINavigationBarAppearance()
-        appearance.configureWithDefaultBackground()
-        appearance.largeTitleTextAttributes = [.font: UIFont.systemFont(ofSize: 34, weight: .bold), .foregroundColor: UIColor(resource: .trackerBlack)]
+        appearance.configureWithOpaqueBackground()
+        appearance.backgroundColor = UIColor(resource: .trackerWhite)
+        appearance.shadowColor = .clear
+        
+        appearance.largeTitleTextAttributes = [
+            .font: UIFont.systemFont(ofSize: 34, weight: .bold),
+            .foregroundColor: UIColor(resource: .trackerBlack)
+        ]
     }
     
     private func setupCollectionView() {
+        collectionView.backgroundColor = UIColor(resource: .trackerWhite)
         view.addSubview(collectionView)
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         
