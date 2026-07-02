@@ -41,6 +41,7 @@ final class StatisticViewController: UIViewController, TrackerRecordStoreDelegat
     // MARK: - Overrides Methods
     override func viewDidLoad() {
         super.viewDidLoad()
+        view.backgroundColor = UIColor(resource: .trackerWhite)
         trackerRecordStore.delegate = self
         
         setupNavigationBar()
@@ -116,7 +117,9 @@ extension StatisticViewController {
         navigationController?.navigationBar.prefersLargeTitles = true
         
         let appearance = UINavigationBarAppearance()
-        appearance.configureWithDefaultBackground()
+        appearance.configureWithOpaqueBackground()
+        appearance.backgroundColor = UIColor(resource: .trackerWhite)
+        appearance.shadowColor = .clear
         
         appearance.largeTitleTextAttributes = [
             .font: UIFont.systemFont(ofSize: 34, weight: .bold),

@@ -63,7 +63,7 @@ extension StatisticCardView {
     }
     
     func setupContentView() {
-        contentView.backgroundColor = .systemBackground
+        contentView.backgroundColor = UIColor(resource: .trackerWhite)
         contentView.layer.cornerRadius = 15
         contentView.translatesAutoresizingMaskIntoConstraints = false
         
