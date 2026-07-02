@@ -89,9 +89,9 @@ extension FiltersViewController: UITableViewDataSource {
         
         let shouldShowCheckmark: Bool = {
             switch filter {
-            case .all, .today:
+            case .all:
                 return false
-            case .completed, .notCompleted:
+            case .completed, .notCompleted, .today:
                 return filter == selectedFilter
             }
         }()

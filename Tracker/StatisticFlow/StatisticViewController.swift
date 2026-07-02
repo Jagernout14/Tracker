@@ -7,7 +7,7 @@
 
 import UIKit
 
-final class StatisticViewController: UIViewController {
+final class StatisticViewController: UIViewController, TrackerRecordStoreDelegate {
     
     // MARK: - Private Properties
     private lazy var emptyScreenImage: UIImageView = {
@@ -30,19 +30,28 @@ final class StatisticViewController: UIViewController {
     
     private lazy var statisticCardView = StatisticCardView()
     
-    private var completedTrackers = 2 {
+    private var completedTrackers = 0 {
         didSet {
             updateUI()
         }
     }
     
+    private let trackerRecordStore = TrackerRecordStore()
+    
     // MARK: - Overrides Methods
     override func viewDidLoad() {
         super.viewDidLoad()
+        trackerRecordStore.delegate = self
         
         setupNavigationBar()
         setupUI()
         updateUI()
+        loadStatistic()
+    }
+    
+    // MARK: - Public Methods
+    func storeDidUpdate() {
+        loadStatistic()
     }
     
     // MARK: - Private Methods
@@ -59,6 +68,14 @@ final class StatisticViewController: UIViewController {
                 value: completedTrackers,
                 title: NSLocalizedString("completed", comment: "")
             )
+        }
+    }
+    
+    private func loadStatistic() {
+        do {
+            completedTrackers = try trackerRecordStore.completedTrackersCount()
+        } catch {
+            print(error)
         }
     }
 }
