@@ -45,6 +45,9 @@ final class TrackersViewController: UIViewController {
         setupCollectionView()
         setupPlaceholder()
         
+        print(Bundle.main.localizations)
+        print(Locale.preferredLanguages)
+        
         view.bringSubviewToFront(filtersButton)
         categoryStore.delegate = self
         
@@ -195,13 +198,13 @@ final class TrackersViewController: UIViewController {
     
     private func deleteTracker(_ tracker: Tracker) {
         let alert = UIAlertController(
-            title: NSLocalizedString("Are you sure you want to delete tracker?", comment: ""),
+            title: NSLocalizedString("areYouSureYouWantToDeleteTracker", comment: ""),
             message: nil,
             preferredStyle: .actionSheet
         )
         
         let deleteAction = UIAlertAction(
-            title: NSLocalizedString("Delete", comment: ""),
+            title: NSLocalizedString("delete", comment: ""),
             style: .destructive
         ) { [weak self] _ in
             guard let self else { return }
@@ -215,7 +218,7 @@ final class TrackersViewController: UIViewController {
         }
         
         let cancelAction = UIAlertAction(
-            title: NSLocalizedString("Cancel", comment: ""),
+            title: NSLocalizedString("cancel", comment: ""),
             style: .cancel
         )
         
@@ -290,7 +293,7 @@ extension TrackersViewController {
     private func setupSearchController() {
         let searchController = UISearchController(searchResultsController: nil)
         searchController.obscuresBackgroundDuringPresentation = false
-        searchController.searchBar.placeholder = NSLocalizedString("Search", comment: "")
+        searchController.searchBar.placeholder = NSLocalizedString("search", comment: "")
         searchController.searchBar.searchBarStyle = .minimal
         searchController.searchResultsUpdater = self
         navigationItem.searchController = searchController
@@ -298,7 +301,7 @@ extension TrackersViewController {
     }
     
     private func setupNavigationBar() {
-        title = NSLocalizedString("Trackers", comment: "")
+        title = NSLocalizedString("trackers", comment: "")
         
         let addTrackerButton = UIBarButtonItem(image: UIImage(resource: .addTrackerIcon), style: .plain, target: self, action: #selector(didTapAddTrackerButton))
         addTrackerButton.tintColor = UIColor(resource: .trackerBlack)
@@ -358,7 +361,7 @@ extension TrackersViewController {
     private func setupEmptyScreenLabel() {
         emptyScreenLabel.font = UIFont.systemFont(ofSize: 12, weight: .medium)
         emptyScreenLabel.textColor = UIColor(resource: .trackerBlack)
-        emptyScreenLabel.text = NSLocalizedString("What shall we track?", comment: "")
+        emptyScreenLabel.text = NSLocalizedString("whatShallWeTrack", comment: "")
         emptyScreenLabel.textAlignment = .center
         emptyScreenLabel.numberOfLines = 0
         emptyScreenLabel.translatesAutoresizingMaskIntoConstraints = false
@@ -372,7 +375,7 @@ extension TrackersViewController {
     }
     
     private func setupFilterButton() {
-        filtersButton.setTitle(NSLocalizedString("Filters", comment: ""), for: .normal)
+        filtersButton.setTitle(NSLocalizedString("filters", comment: ""), for: .normal)
         filtersButton.setTitleColor(UIColor(resource: .trackerWhite), for: .normal)
         filtersButton.titleLabel?.font = .systemFont(ofSize: 17, weight: .regular)
         filtersButton.backgroundColor = UIColor(resource: .trackerBlue)
@@ -415,10 +418,10 @@ extension TrackersViewController {
         }
         
         if hasTrackersForSelectedDate {
-            emptyScreenLabel.text = NSLocalizedString("Nothing found", comment: "")
+            emptyScreenLabel.text = NSLocalizedString("nothingFound", comment: "")
             filtersButton.isHidden = false
         } else {
-            emptyScreenLabel.text = NSLocalizedString("What shall we track?", comment: "")
+            emptyScreenLabel.text = NSLocalizedString("whatShallWeTrack", comment: "")
             filtersButton.isHidden = true
         }
     }
@@ -514,7 +517,7 @@ extension TrackersViewController: UICollectionViewDelegate {
         
         return UIContextMenuConfiguration(identifier: nil, previewProvider: nil) { _ in
             let editAction = UIAction(
-                title: NSLocalizedString("Edit", comment: ""),
+                title: NSLocalizedString("edit", comment: ""),
                 image: UIImage(systemName: "pencil")
             ) { [weak self] _ in
                 
@@ -524,7 +527,7 @@ extension TrackersViewController: UICollectionViewDelegate {
             }
             
             let deleteAction = UIAction(
-                title: NSLocalizedString("Delete", comment: ""),
+                title: NSLocalizedString("delete", comment: ""),
                 image: UIImage(systemName: "trash"),
                 attributes: .destructive
             ) { [weak self] _ in

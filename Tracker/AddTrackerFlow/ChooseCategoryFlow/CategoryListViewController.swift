@@ -79,7 +79,7 @@ extension CategoryListViewController {
     }
     
     private func setupHeader() {
-        headerLabel.text = NSLocalizedString("Category", comment: "")
+        headerLabel.text = NSLocalizedString("categoryName", comment: "")
         headerLabel.font = .systemFont(ofSize: 16, weight: .medium)
         headerLabel.textColor = UIColor(resource: .trackerBlack)
         
@@ -112,7 +112,7 @@ extension CategoryListViewController {
     }
     
     private func setupAddCategoryButton() {
-        addCategoryButton.setTitle(NSLocalizedString("Add category", comment: ""), for: .normal)
+        addCategoryButton.setTitle(NSLocalizedString("addCategory", comment: ""), for: .normal)
         addCategoryButton.setTitleColor(UIColor(resource: .trackerWhite), for: .normal)
         addCategoryButton.titleLabel?.font = .systemFont(ofSize: 16, weight: .medium)
         addCategoryButton.backgroundColor = UIColor(resource: .trackerBlack)
@@ -148,7 +148,7 @@ extension CategoryListViewController {
     private func setupEmptyScreenLabel() {
         emptyScreenLabel.font = UIFont.systemFont(ofSize: 12, weight: .medium)
         emptyScreenLabel.textColor = UIColor(resource: .trackerBlack)
-        emptyScreenLabel.text = NSLocalizedString("Habits and events can be combined by meaning", comment: "")
+        emptyScreenLabel.text = NSLocalizedString("habitsAndEventsCanBeCombinedByMeaning", comment: "")
         emptyScreenLabel.textAlignment = .center
         emptyScreenLabel.numberOfLines = 0
         emptyScreenLabel.translatesAutoresizingMaskIntoConstraints = false
@@ -222,11 +222,11 @@ extension CategoryListViewController: UITableViewDelegate {
         
         return UIContextMenuConfiguration(identifier: nil, previewProvider: nil) { [weak self] _ in
             
-            let editAction = UIAction(title: NSLocalizedString("Edit", comment: "")) { _ in
+            let editAction = UIAction(title: NSLocalizedString("edit", comment: "")) { _ in
                 self?.editCategory(named: categoryName)
             }
             
-            let deleteAction = UIAction(title: NSLocalizedString("Delete", comment: ""), attributes: .destructive) { _ in
+            let deleteAction = UIAction(title: NSLocalizedString("delete", comment: ""), attributes: .destructive) { _ in
                 self?.deleteCategory(at: indexPath.row)
             }
             

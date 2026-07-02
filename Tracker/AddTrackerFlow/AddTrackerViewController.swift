@@ -26,8 +26,8 @@ final class AddTrackerViewController: UIViewController {
     }()
     
     private let options = [
-        NSLocalizedString("Category", comment: ""),
-        NSLocalizedString("Schedule", comment: "")
+        NSLocalizedString("categoryName", comment: ""),
+        NSLocalizedString("categoryName", comment: "")
     ]
     
     private var selectedSchedule: Set<WeekDays> = []
@@ -93,8 +93,8 @@ final class AddTrackerViewController: UIViewController {
     }
     
     private func editTracker(with tracker: Tracker) {
-        headerLabel.text = NSLocalizedString("Edit habit", comment: "")
-        createButton.setTitle(NSLocalizedString("Save", comment: ""), for: .normal)
+        headerLabel.text = NSLocalizedString("editHabit", comment: "")
+        createButton.setTitle(NSLocalizedString("save", comment: ""), for: .normal)
         
         completedDaysLabel.text = String.localizedStringWithFormat(NSLocalizedString("days_count", comment: ""), completedDays)
         completedDaysLabel.isHidden = false
@@ -166,7 +166,7 @@ final class AddTrackerViewController: UIViewController {
     }
     
     private func setupHeader() {
-        headerLabel.text = NSLocalizedString("New habit", comment: "")
+        headerLabel.text = NSLocalizedString("newHabit", comment: "")
         headerLabel.font = .systemFont(ofSize: 16, weight: .medium)
         headerLabel.textColor = .trackerBlack
         headerLabel.textAlignment = .center
@@ -194,7 +194,7 @@ final class AddTrackerViewController: UIViewController {
     }
     
     private func setupSearchField() {
-        searchField.placeholder = NSLocalizedString("Enter tracker name", comment: "")
+        searchField.placeholder = NSLocalizedString("enterTrackerName", comment: "")
         searchField.backgroundColor = UIColor(resource: .trackerGrayWithOpacity)
         searchField.layer.cornerRadius = 16
         searchField.leftView = UIView(frame: CGRect(x: 0, y: 0, width: 16, height: 0))
@@ -254,7 +254,7 @@ final class AddTrackerViewController: UIViewController {
     }
     
     private func setupCancelButton() {
-        cancelButton.setTitle(NSLocalizedString("Cancel", comment: ""), for: .normal)
+        cancelButton.setTitle(NSLocalizedString("cancel", comment: ""), for: .normal)
         cancelButton.setTitleColor(UIColor(resource: .trackerRed), for: .normal)
         cancelButton.titleLabel?.font = .systemFont(ofSize: 16, weight: .medium)
         cancelButton.layer.borderWidth = 1
@@ -274,7 +274,7 @@ final class AddTrackerViewController: UIViewController {
     }
     
     private func setupCreateButton() {
-        createButton.setTitle(NSLocalizedString("Create", comment: ""), for: .normal)
+        createButton.setTitle(NSLocalizedString("create", comment: ""), for: .normal)
         createButton.setTitleColor(UIColor(resource: .trackerWhite), for: .normal)
         createButton.titleLabel?.font = .systemFont(ofSize: 16, weight: .medium)
         createButton.isEnabled = false
@@ -469,7 +469,7 @@ extension AddTrackerViewController: UICollectionViewDataSource {
         case .emoji:
             header.configure(with: "Emoji")
         case .color:
-            header.configure(with: NSLocalizedString("Color", comment: ""))
+            header.configure(with: NSLocalizedString("color", comment: ""))
         }
         return header
     }

@@ -73,7 +73,7 @@ extension OnboardingPageViewController {
     }
     
     private func setupButton() {
-        button.setTitle(NSLocalizedString("Wow, that's technology!", comment: ""), for: .normal)
+        button.setTitle(NSLocalizedString("wowThatsTechnology", comment: ""), for: .normal)
         button.setTitleColor(UIColor(resource: .trackerWhite), for: .normal)
         button.titleLabel?.font = .systemFont(ofSize: 16, weight: .medium)
         button.backgroundColor = UIColor(resource: .trackerBlack)

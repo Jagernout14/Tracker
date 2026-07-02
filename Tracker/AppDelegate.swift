@@ -10,7 +10,7 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
         guard let configuration = AppMetricaConfiguration(
                   apiKey: "предьявите ключик, будьте добры"
               ) else {
-                  assertionFailure("Не удалось создать конфигурацию AppMetrica")
+                  print("Не удалось создать конфигурацию AppMetrica")
                   return true
               }
 

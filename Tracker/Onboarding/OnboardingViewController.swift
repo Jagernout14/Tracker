@@ -11,8 +11,8 @@ final class OnboardingViewController: UIPageViewController {
     
     // MARK: - Private Properties
     private let onboardingPages: [OnboardingPage] = [
-        .init(image: UIImage(resource: .onboardingFirst), title: NSLocalizedString("Track only what you want", comment: "")),
-        .init(image: UIImage(resource: .onboardingSecond), title: NSLocalizedString("Even if it's not liters of water and yoga", comment: ""))
+        .init(image: UIImage(resource: .onboardingFirst), title: NSLocalizedString("trackOnlyWhatYouWant", comment: "")),
+        .init(image: UIImage(resource: .onboardingSecond), title: NSLocalizedString("evenIfItsNotLitersOfWaterAndYoga", comment: ""))
     ]
     
     private lazy var pages: [OnboardingPageViewController] = {

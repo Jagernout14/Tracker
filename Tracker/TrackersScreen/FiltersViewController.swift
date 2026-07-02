@@ -38,7 +38,7 @@ final class FiltersViewController: UIViewController {
 // MARK: - UI Setup
 extension FiltersViewController {
     private func setupHeader() {
-        headerLabel.text = NSLocalizedString("Filters", comment: "")
+        headerLabel.text = NSLocalizedString("filters", comment: "")
         headerLabel.font = .systemFont(ofSize: 16, weight: .medium)
         headerLabel.textColor = UIColor(resource: .trackerBlack)
         headerLabel.translatesAutoresizingMaskIntoConstraints = false

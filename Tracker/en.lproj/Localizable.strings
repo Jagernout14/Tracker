@@ -1,4 +1,4 @@
-/* 
+/*
   Localizable.strings
   Tracker
 
@@ -6,38 +6,37 @@
   
 */
 
-"Category" = "Категория";
-"Add category" = "Добавить категорию";
-"Edit category" = "Редактирование категории";
-"Done" = "Готово";
-"Cancel" = "Отменить";
-"Save" = "Сохранить";
-"New category" = "Новая категория";
-"Create" = "Создать";
-"Enter category name" = "Введите название категории";
-"Habits and events can be combined by meaning" = "Привычки и события можно объединить по смыслу";
-"Edit" = "Редактировать";
-"Delete" = "Удалить";
-"Schedule" = "Расписание";
-"New habit" = "Новая привычка";
-"Enter tracker name" = "Введите название трекера";
-"Color" = "Цвет";
-"Unknown" = "Неизвестно";
-"Wow, that's technology!" = "Вот это технологии!";
-"Track only what you want" = "Отслеживайте только то, что хотите";
-"Even if it's not liters of water and yoga" = "Даже если это не литры воды и йога";
-"Search" = "Поиск";
-"Trackers" = "Трекеры";
-"What shall we track?" = "Что будем отслеживать?";
-"Filters" = "Фильтры";
-"Statistics" = "Статистика";
-"Edit habit" = "Редактирование привычки";
-"Are you sure you want to delete tracker?" = "Уверены что хотите удалить трекер?";
-"All Trackers" = "Все трекеры";
-"Trackers for Today" = "Трекеры на сегодня";
-"Completed" = "Завершенные";
-"Uncompleted" = "Незавершённые";
-"Nothing found" = "Ничего не найдено";
-"What shall we track?" = "Что будем отслеживать?";
-
-
+"categoryName" = "Category";
+"addCategory" = "Add category";
+"editCategory" = "Edit category";
+"done" = "Done";
+"cancel" = "Cancel";
+"save" = "Save";
+"newCategory" = "New Category";
+"create" = "Create";
+"enterCategoryName" = "Enter category name";
+"habitsAndEventsCanBeCombinedByMeaning" = "Habits and events can be combined by meaning";
+"edit" = "Edit";
+"delete" = "Delete";
+"schedule" = "Schedule";
+"newHabit" = "New habit";
+"enterTrackerName" = "Enter tracker name";
+"color" = "Color";
+"unknown" = "Unknown";
+"wowThatsTechnology" = "Wow, that's technology!";
+"trackOnlyWhatYouWant" = "Track only what you want";
+"evenIfItsNotLitersOfWaterAndYoga" = "Even if it's not liters of water and yoga";
+"search" = "Search";
+"trackers" = "Trackers";
+"whatShallWeTrack" = "What shall we track?";
+"filters" = "Filters";
+"statistics" = "Statistics";
+"editHabit" = "Edit habit";
+"areYouSureYouWantToDeleteTracker" = "Are you sure you want to delete tracker?";
+"allTrackers" = "All Trackers";
+"trackersForToday" = "Trackers for Today";
+"completed" = "Completed";
+"uncompleted" = "Uncompleted";
+"nothingFound" = "Nothing found";
+"whatShallWeTrack" = "What shall we track?";
+"search" = "Search";

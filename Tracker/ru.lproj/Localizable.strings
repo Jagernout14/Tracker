@@ -1,4 +1,4 @@
-/*
+/* 
   Localizable.strings
   Tracker
 
@@ -6,36 +6,39 @@
   
 */
 
-"Category" = "Категория";
-"Add category" = "Добавить категорию";
-"Edit category" = "Редактирование категории";
-"Done" = "Готово";
-"Cancel" = "Отменить";
-"Save" = "Сохранить";
-"New category" = "Новая категория";
-"Create" = "Создать";
-"Enter category name" = "Введите название категории";
-"Habits and events can be combined by meaning" = "Привычки и события можно объединить по смыслу";
-"Edit" = "Редактировать";
-"Delete" = "Удалить";
-"Schedule" = "Расписание";
-"New habit" = "Новая привычка";
-"Enter tracker name" = "Введите название трекера";
-"Color" = "Цвет";
-"Unknown" = "Неизвестно";
-"Wow, that's technology!" = "Вот это технологии!";
-"Track only what you want" = "Отслеживайте только то, что хотите";
-"Even if it's not liters of water and yoga" = "Даже если это не литры воды и йога";
-"Search" = "Поиск";
-"Trackers" = "Трекеры";
+"categoryName" = "Категория";
+"addCategory" = "Добавить категорию";
+"editCategory" = "Редактирование категории";
+"done" = "Готово";
+"cancel" = "Отменить";
+"save" = "Сохранить";
+"newCategory" = "Новая категория";
+"create" = "Создать";
+"enterCategoryName" = "Введите название категории";
+"habitsAndEventsCanBeCombinedByMeaning" = "Привычки и события можно объединить по смыслу";
+"edit" = "Редактировать";
+"delete" = "Удалить";
+"schedule" = "Расписание";
+"newHabit" = "Новая привычка";
+"enterTrackerName" = "Введите название трекера";
+"color" = "Цвет";
+"unknown" = "Неизвестно";
+"wowThatsTechnology" = "Вот это технологии!";
+"trackOnlyWhatYouWant" = "Отслеживайте только то, что хотите";
+"evenIfItsNotLitersOfWaterAndYoga" = "Даже если это не литры воды и йога";
+"search" = "Поиск";
+"trackers" = "Трекеры";
+"whatShallWeTrack" = "Что будем отслеживать?";
+"filters" = "Фильтры";
+"statistics" = "Статистика";
+"editHabit" = "Редактирование привычки";
+"areYouSureYouWantToDeleteTracker" = "Уверены что хотите удалить трекер?";
+"allTrackers" = "Все трекеры";
+"trackersForToday" = "Трекеры на сегодня";
+"completed" = "Завершенные";
+"uncompleted" = "Незавершённые";
+"nothingFound" = "Ничего не найдено";
 "What shall we track?" = "Что будем отслеживать?";
-"Filters" = "Фильтры";
-"Statistics" = "Статистика";
-"Edit habit" = "Редактирование привычки";
-"Are you sure you want to delete tracker?" = "Уверены что хотите удалить трекер?";
-"All Trackers" = "Все трекеры";
-"Trackers for Today" = "Трекеры на сегодня";
-"Completed" = "Завершенные";
-"Uncompleted" = "Незавершённые";
-"Nothing found" = "Ничего не найдено";
-"What shall we track?" = "Что будем отслеживать?";
+"search" = "Поиск";
+
+

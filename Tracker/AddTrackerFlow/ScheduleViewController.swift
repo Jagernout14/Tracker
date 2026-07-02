@@ -39,7 +39,7 @@ final class ScheduleViewController: UIViewController {
     
     //MARK: UI Setup
     private func setupHeader() {
-        headerLabel.text = NSLocalizedString("Schedule", comment: "")
+        headerLabel.text = NSLocalizedString("schedule", comment: "")
         headerLabel.font = .systemFont(ofSize: 16, weight: .medium)
         headerLabel.textColor = UIColor(resource: .trackerBlack)
         
@@ -54,7 +54,7 @@ final class ScheduleViewController: UIViewController {
     }
     
     private func setupDoneButton() {
-        doneButton.setTitle(NSLocalizedString("Done", comment: ""), for: .normal)
+        doneButton.setTitle(NSLocalizedString("done", comment: ""), for: .normal)
         doneButton.setTitleColor(UIColor(resource: .trackerWhite), for: .normal)
         doneButton.titleLabel?.font = .systemFont(ofSize: 16, weight: .medium)
         doneButton.backgroundColor = UIColor(resource: .trackerBlack)
@@ -110,7 +110,7 @@ extension ScheduleViewController: UITableViewDataSource {
         if let day = WeekDays(rawValue: indexPath.row) {
             cell.textLabel?.text = day.displayName
         } else {
-            cell.textLabel?.text = NSLocalizedString("Unknown", comment: "")
+            cell.textLabel?.text = NSLocalizedString("unknown", comment: "")
         }
         
         let switchView = UISwitch()
