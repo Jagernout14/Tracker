@@ -13,7 +13,7 @@ final class AddTrackerEmojiCollectionViewCell:UICollectionViewCell {
     static let reuseIdentifier = Identifiers.AddTrackerEmojiCollectionViewCell.cellReuseIdentifier
     
     // MARK: - Private Properties
-    private let emojiLabel = UILabel()
+    private lazy var emojiLabel = UILabel()
     
     // MARK: - Initializers
     override init(frame: CGRect) {

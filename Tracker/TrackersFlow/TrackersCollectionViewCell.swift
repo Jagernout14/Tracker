@@ -6,14 +6,13 @@ final class TrackersCollectionViewCell: UICollectionViewCell {
     var onToggle: (() -> Void)?
     
     // MARK: - Private Properties
-    private let cardView = UIView()
-    private let emojiBackgroundView = UIView()
+    private lazy var cardView = UIView()
+    private lazy var emojiBackgroundView = UIView()
+    private lazy var emojiLabel = UILabel()
+    private lazy var titleLabel = UILabel()
     
-    private let emojiLabel = UILabel()
-    private let titleLabel = UILabel()
-    
-    private let daysCountLabel = UILabel()
-    private let trackerButton = UIButton(type: .system)
+    private lazy var daysCountLabel = UILabel()
+    private lazy var trackerButton = UIButton(type: .system)
     
     // MARK: - Initializers
     override init(frame: CGRect) {
@@ -33,7 +32,7 @@ final class TrackersCollectionViewCell: UICollectionViewCell {
         trackerButton.backgroundColor = tracker.color
         emojiLabel.text = tracker.icon
         titleLabel.text = tracker.name
-        daysCountLabel.text = "\(completedDays) дней"
+        daysCountLabel.text = String.localizedStringWithFormat(NSLocalizedString("days_count", comment: ""), completedDays)
         
         let buttonIcon = TrackerButtonIcons.icon(for: isCompleted).rawValue
         

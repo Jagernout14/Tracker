@@ -16,9 +16,9 @@ final class AddNewCategoryViewController: UIViewController {
     var onCategoryEdit: ((String, String) -> Void)?
     
     // MARK: - Private Properties
-    lazy private var headerLabel = UILabel()
-    lazy private var textField = UITextField()
-    lazy private var doneButton = UIButton()
+    private lazy var headerLabel = UILabel()
+    private lazy var textField = UITextField()
+    private lazy var doneButton = UIButton()
     
     private let categoryStore = TrackerCategoryStore()
     
@@ -41,13 +41,13 @@ final class AddNewCategoryViewController: UIViewController {
     
     private func configureScreenState() {
         if let categoryToEdit {
-            headerLabel.text = "Редактирование категории"
+            headerLabel.text = NSLocalizedString("editCategory", comment: "")
             textField.text = categoryToEdit
-            doneButton.setTitle("Готово", for: .normal)
+            doneButton.setTitle(NSLocalizedString("done", comment: ""), for: .normal)
         } else {
-            headerLabel.text = "Новая категория"
+            headerLabel.text = NSLocalizedString("newCategory", comment: "")
             textField.text = ""
-            doneButton.setTitle("Создать", for: .normal)
+            doneButton.setTitle(NSLocalizedString("create", comment: ""), for: .normal)
         }
     }
     
@@ -86,7 +86,7 @@ extension AddNewCategoryViewController {
     }
     
     private func setupHeader() {
-        headerLabel.text = "Новая категория"
+        headerLabel.text = NSLocalizedString("newCategory", comment: "")
         headerLabel.font = .systemFont(ofSize: 16, weight: .medium)
         headerLabel.textColor = UIColor(resource: .trackerBlack)
         
@@ -100,7 +100,7 @@ extension AddNewCategoryViewController {
     }
     
     private func setupTextField() {
-        textField.placeholder = "Введите название категории"
+        textField.placeholder = NSLocalizedString("enterCategoryName", comment: "")
         textField.backgroundColor = UIColor(resource: .trackerGrayWithOpacity)
         textField.layer.cornerRadius = 16
         textField.leftView = UIView(frame: CGRect(x: 0, y: 0, width: 16, height: 0))
@@ -120,7 +120,7 @@ extension AddNewCategoryViewController {
     }
     
     func setupDoneButton() {
-        doneButton.setTitle("Готово", for: .normal)
+        doneButton.setTitle(NSLocalizedString("done", comment: ""), for: .normal)
         doneButton.layer.cornerRadius = 16
         
         doneButton.addTarget(self,action: #selector(didTapDoneButton), for: .touchUpInside)

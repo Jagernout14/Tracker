@@ -1,0 +1,45 @@
+/* 
+  Localizable.strings
+  Tracker
+
+  Created by Роман Пичугин on 29.06.2026.
+  
+*/
+
+"categoryName" = "Категория";
+"addCategory" = "Добавить категорию";
+"editCategory" = "Редактирование категории";
+"done" = "Готово";
+"cancel" = "Отменить";
+"save" = "Сохранить";
+"newCategory" = "Новая категория";
+"create" = "Создать";
+"enterCategoryName" = "Введите название категории";
+"habitsAndEventsCanBeCombinedByMeaning" = "Привычки и события можно объединить по смыслу";
+"edit" = "Редактировать";
+"delete" = "Удалить";
+"schedule" = "Расписание";
+"newHabit" = "Новая привычка";
+"enterTrackerName" = "Введите название трекера";
+"color" = "Цвет";
+"unknown" = "Неизвестно";
+"wowThatsTechnology" = "Вот это технологии!";
+"trackOnlyWhatYouWant" = "Отслеживайте только то, что хотите";
+"evenIfItsNotLitersOfWaterAndYoga" = "Даже если это не литры воды и йога";
+"search" = "Поиск";
+"trackers" = "Трекеры";
+"whatShallWeTrack" = "Что будем отслеживать?";
+"filters" = "Фильтры";
+"statistics" = "Статистика";
+"editHabit" = "Редактирование привычки";
+"areYouSureYouWantToDeleteTracker" = "Уверены что хотите удалить трекер?";
+"allTrackers" = "Все трекеры";
+"trackersForToday" = "Трекеры на сегодня";
+"completed" = "Завершенные";
+"uncompleted" = "Незавершённые";
+"nothingFound" = "Ничего не найдено";
+"What shall we track?" = "Что будем отслеживать?";
+"search" = "Поиск";
+"nothing" = "Анализировать пока нечего";
+
+

@@ -1,0 +1,44 @@
+/*
+  Localizable.strings
+  Tracker
+
+  Created by Роман Пичугин on 29.06.2026.
+  
+*/
+
+"categoryName" = "Category";
+"addCategory" = "Add category";
+"editCategory" = "Edit category";
+"done" = "Done";
+"cancel" = "Cancel";
+"save" = "Save";
+"newCategory" = "New Category";
+"create" = "Create";
+"enterCategoryName" = "Enter category name";
+"habitsAndEventsCanBeCombinedByMeaning" = "Habits and events can be combined by meaning";
+"edit" = "Edit";
+"delete" = "Delete";
+"schedule" = "Schedule";
+"newHabit" = "New habit";
+"enterTrackerName" = "Enter tracker name";
+"color" = "Color";
+"unknown" = "Unknown";
+"wowThatsTechnology" = "Wow, that's technology!";
+"trackOnlyWhatYouWant" = "Track only what you want";
+"evenIfItsNotLitersOfWaterAndYoga" = "Even if it's not liters of water and yoga";
+"search" = "Search";
+"trackers" = "Trackers";
+"whatShallWeTrack" = "What shall we track?";
+"filters" = "Filters";
+"statistics" = "Statistics";
+"editHabit" = "Edit habit";
+"areYouSureYouWantToDeleteTracker" = "Are you sure you want to delete tracker?";
+"allTrackers" = "All Trackers";
+"trackersForToday" = "Trackers for Today";
+"completed" = "Completed";
+"uncompleted" = "Uncompleted";
+"nothingFound" = "Nothing found";
+"whatShallWeTrack" = "What shall we track?";
+"search" = "Search";
+"nothing" = "There is nothing to analyze yet";
+
